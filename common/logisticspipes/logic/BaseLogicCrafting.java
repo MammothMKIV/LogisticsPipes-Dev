@@ -23,6 +23,7 @@ import logisticspipes.network.packets.old.PacketModuleInteger;
 import logisticspipes.network.packets.old.PacketPipeInteger;
 import logisticspipes.pipes.PipeItemsCraftingLogistics;
 import logisticspipes.pipes.basic.CoreRoutedPipe;
+import logisticspipes.pipes.upgrades.UpgradeManager;
 import logisticspipes.proxy.MainProxy;
 import logisticspipes.proxy.SimpleServiceLocator;
 import logisticspipes.proxy.interfaces.ICraftingRecipeProvider;
@@ -328,7 +329,8 @@ public class BaseLogicCrafting extends BaseRoutingLogic implements IRequireRelia
 	@Override
 	public void onWrenchClicked(EntityPlayer entityplayer) {
 		if (MainProxy.isServer(entityplayer.worldObj)) {
-			MainProxy.sendPacketToPlayer(new PacketGuiArgument(GuiIDs.GUI_CRAFTINGPIPE_ID, new Object[]{((CoreRoutedPipe)this.container.pipe).getUpgradeManager().isAdvancedSatelliteCrafter(), ((CoreRoutedPipe)this.container.pipe).getUpgradeManager().getLiquidCrafter(), amount, ((CoreRoutedPipe)this.container.pipe).getUpgradeManager().hasByproductExtractor()}).getPacket(),  (Player) entityplayer);
+			UpgradeManager crp = ((CoreRoutedPipe)this.container.getPipe()).getUpgradeManager();
+			MainProxy.sendPacketToPlayer(new PacketGuiArgument(GuiIDs.GUI_CRAFTINGPIPE_ID, new Object[]{crp.isAdvancedSatelliteCrafter(), crp.getLiquidCrafter(), amount, crp.hasByproductExtractor()}).getPacket(),  (Player) entityplayer);
 			entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_CRAFTINGPIPE_ID, worldObj, xCoord, yCoord, zCoord);
 		}
 	}
@@ -351,7 +353,7 @@ public class BaseLogicCrafting extends BaseRoutingLogic implements IRequireRelia
 					continue;
 				}
 			}
-			int received = RequestTree.requestPartial(stack, (CoreRoutedPipe) container.pipe);
+			int received = RequestTree.requestPartial(stack, (CoreRoutedPipe) container.getPipe());
 			if(received < stack.stackSize) {
 				stack.stackSize -= received;
 				_lostItems.add(new DelayedGeneric<ItemIdentifierStack>(stack,5000));

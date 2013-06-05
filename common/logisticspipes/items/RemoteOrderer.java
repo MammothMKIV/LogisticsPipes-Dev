@@ -21,8 +21,9 @@ import net.minecraftforge.common.DimensionManager;
 
 import org.lwjgl.input.Keyboard;
 
-import buildcraft.transport.Pipe;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipe;
+import buildcraft.api.transport.IPipeTile;
+
 import cpw.mods.fml.common.network.Player;
 
 public class RemoteOrderer extends Item {
@@ -123,10 +124,10 @@ public class RemoteOrderer extends Item {
 			return null;
 		}
 		TileEntity tile = world.getBlockTileEntity(stack.stackTagCompound.getInteger("connectedPipe-x"), stack.stackTagCompound.getInteger("connectedPipe-y"), stack.stackTagCompound.getInteger("connectedPipe-z"));
-		if(!(tile instanceof TileGenericPipe)) {
+		if(!(tile instanceof IPipeTile)) {
 			return null;
 		}
-		Pipe pipe = ((TileGenericPipe)tile).pipe;
+		IPipe pipe = ((IPipeTile)tile).getPipe();
 		if(pipe instanceof PipeItemsRemoteOrdererLogistics) {
 			return (PipeItemsRemoteOrdererLogistics)pipe;
 		}

@@ -121,7 +121,7 @@ public class BaseLogicLiquidSatellite extends BaseRoutingLogic implements IRequi
 
 	
 	private void updateWatchers() {
-		for(EntityPlayer player : ((PipeLiquidSatelliteLogistics)this.container.pipe).localModeWatchers) {
+		for(EntityPlayer player : ((PipeLiquidSatelliteLogistics)this.container.getPipe()).localModeWatchers) {
 			final PacketPipeInteger packet = new PacketPipeInteger(NetworkConstants.SATELLITE_PIPE_SATELLITE_ID, xCoord, yCoord, zCoord, satelliteId);
 			MainProxy.sendPacketToPlayer(packet.getPacket(),(Player) player);
 		}

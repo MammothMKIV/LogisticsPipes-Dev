@@ -9,8 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipe;
+import buildcraft.api.transport.IPipeTile;
 
 public class CraftingSignCreator extends LogisticsItem {
 
@@ -28,10 +28,10 @@ public class CraftingSignCreator extends LogisticsItem {
 			return false;
 		}
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if(!(tile instanceof TileGenericPipe)) {
+		if(!(tile instanceof IPipeTile)) {
 			return false;
 		}
-		Pipe pipe = ((TileGenericPipe)tile).pipe;
+		IPipe pipe = ((IPipeTile)tile).getPipe();
 		if(pipe == null) {
 			return false;
 		}

@@ -34,7 +34,7 @@ import logisticspipes.utils.WorldUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
-import buildcraft.energy.EngineWood;
+//import buildcraft.energy.EngineWood;
 import buildcraft.energy.TileEngine;
 import buildcraft.transport.TileGenericPipe;
 import cpw.mods.fml.common.network.Player;
@@ -76,7 +76,7 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 	@Override
 	public void throttledUpdateEntity() {
 		
-		if (!((CoreRoutedPipe)this.container.pipe).isEnabled()){
+		if (!((CoreRoutedPipe)this.container.getPipe()).isEnabled()){
 			return;
 		}
 		
@@ -96,7 +96,7 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 			if (!(tile.tile instanceof IInventory)) continue;
 			
 			//Do not attempt to supply redstone engines
-			if (tile.tile instanceof TileEngine && ((TileEngine)tile.tile).engine instanceof EngineWood) continue;
+			//if (tile.tile instanceof TileEngine && ((TileEngine)tile.tile)..engine instanceof EngineWood) continue;
 			
 			IInventory inv = (IInventory) tile.tile;
 			if (inv.getSizeInventory() < 1) continue;
@@ -131,7 +131,7 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 				}
 			}
 			
-			((PipeItemsSupplierLogistics)this.container.pipe).setRequestFailed(false);
+			((PipeItemsSupplierLogistics)this.container.getPipe()).setRequestFailed(false);
 
 			//Make request
 			for (Entry<ItemIdentifier, Integer> need : needed.entrySet()){
@@ -145,12 +145,12 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 				boolean success = false;
 
 				if(_requestPartials) {
-					neededCount = RequestTree.requestPartial(need.getKey().makeStack(neededCount), (IRequestItems) container.pipe);
+					neededCount = RequestTree.requestPartial(need.getKey().makeStack(neededCount), (IRequestItems) container.getPipe());
 					if(neededCount > 0) {
 						success = true;
 					}
 				} else {
-					success = RequestTree.request(need.getKey().makeStack(neededCount), (IRequestItems) container.pipe, null)>0;
+					success = RequestTree.request(need.getKey().makeStack(neededCount), (IRequestItems) container.getPipe(), null)>0;
 				}
 				
 				if (success){
@@ -161,7 +161,7 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 						_requestedItems.put(need.getKey(), currentRequest + neededCount);
 					}
 				} else {
-					((PipeItemsSupplierLogistics)this.container.pipe).setRequestFailed(true);
+					((PipeItemsSupplierLogistics)this.container.getPipe()).setRequestFailed(true);
 				}
 				
 			}

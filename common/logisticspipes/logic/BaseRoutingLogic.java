@@ -33,7 +33,7 @@ import buildcraft.transport.pipes.PipeLogic;
 public abstract class BaseRoutingLogic extends PipeLogic{
 	
 	public CoreRoutedPipe getRoutedPipe(){
-		return (CoreRoutedPipe) this.container.pipe;
+		return (CoreRoutedPipe) this.container.getPipe();
 	}
 	
 	public abstract void onWrenchClicked(EntityPlayer entityplayer);

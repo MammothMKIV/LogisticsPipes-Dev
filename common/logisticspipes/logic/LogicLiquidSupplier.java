@@ -105,7 +105,7 @@ public class LogicLiquidSupplier extends BaseRoutingLogic implements IRequireRel
 				}
 			}
 			
-			((PipeItemsLiquidSupplier)this.container.pipe).setRequestFailed(false);
+			((PipeItemsLiquidSupplier)this.container.getPipe()).setRequestFailed(false);
 			
 			//Make request
 			
@@ -123,12 +123,12 @@ public class LogicLiquidSupplier extends BaseRoutingLogic implements IRequireRel
 				boolean success = false;
 
 				if(_requestPartials) {
-					countToRequest = RequestTree.requestPartial(need.makeStack(countToRequest), (IRequestItems) this.container.pipe);
+					countToRequest = RequestTree.requestPartial(need.makeStack(countToRequest), (IRequestItems) this.container.getPipe());
 					if(countToRequest > 0) {
 						success = true;
 					}
 				} else {
-					success = RequestTree.request(need.makeStack(countToRequest), (IRequestItems) this.container.pipe, null)>0;
+					success = RequestTree.request(need.makeStack(countToRequest), (IRequestItems) this.container.getPipe(), null)>0;
 				}
 				
 				if (success){
@@ -139,7 +139,7 @@ public class LogicLiquidSupplier extends BaseRoutingLogic implements IRequireRel
 						_requestedItems.put(need, currentRequest + countToRequest);
 					}
 				} else{
-					((PipeItemsLiquidSupplier)this.container.pipe).setRequestFailed(true);
+					((PipeItemsLiquidSupplier)this.container.getPipe()).setRequestFailed(true);
 				}
 			}
 		}

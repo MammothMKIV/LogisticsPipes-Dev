@@ -74,7 +74,7 @@ import buildcraft.api.gates.IAction;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.tools.IToolWrench;
 import buildcraft.api.transport.IPipedItem;
-import buildcraft.core.EntityPassiveItem;
+//import buildcraft.core.EntityPassiveItem;
 import buildcraft.core.utils.Localization;
 import buildcraft.core.utils.Utils;
 import buildcraft.transport.BlockGenericPipe;
