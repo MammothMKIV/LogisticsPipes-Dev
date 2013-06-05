@@ -32,7 +32,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipe;
+import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.network.Player;
 
 public class LogisticsSecurityTileEntity extends TileEntity implements IGuiOpenControler, ISecurityProvider {
@@ -312,9 +313,10 @@ public class LogisticsSecurityTileEntity extends TileEntity implements IGuiOpenC
 					return true;
 				}
 			}
-			if(tile instanceof TileGenericPipe) {
-				if(((TileGenericPipe)tile).pipe instanceof IRoutedPowerProvider) {
-					if(((IRoutedPowerProvider)((TileGenericPipe)tile).pipe).useEnergy(amount)) {
+			if(tile instanceof IPipeTile) {
+				IPipe pipe = ((IPipeTile)tile).getPipe();
+				if( pipe instanceof IRoutedPowerProvider) {
+					if(((IRoutedPowerProvider)pipe).useEnergy(amount)) {
 						return true;
 					}
 				}

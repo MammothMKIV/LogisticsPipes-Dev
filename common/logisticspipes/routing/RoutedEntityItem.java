@@ -54,22 +54,22 @@ public class RoutedEntityItem extends EntityPassiveItem implements IRoutedItem{
 	
 	List<Integer> jamlist = new ArrayList<Integer>();
 	
-	public RoutedEntityItem(World world, IPipedItem entityItem) {
-		super(world, entityItem.getEntityId());
-		thisItem = ItemIdentifierStack.GetFromStack(entityItem.getItemStack());
-		container = entityItem.getContainer();
-		position = entityItem.getPosition();
-		speed = entityItem.getSpeed();
-		item = entityItem.getItemStack();
+	public RoutedEntityItem(World world,double x, double y, double z, ItemIdentifierStack item ) {
+		super(world,x,y,z,item.makeNormalStack());
+		thisItem = item;
+//		container = entityItem.getContainer();
+//		position = entityItem.getPosition();
+//		speed = entityItem.getSpeed();
+//		item = entityItem.getItemStack();
 
 		delay = 10*20 + world.getTotalWorldTime(); //10 seconds, it should be delivered by then
 //		delay = 62; //64-2 ticks (assume destination consumes items at 1/tick) *20ms ; that way another stack gets sent 64 ticks after the first.
 		
 		
-		if(entityItem.getContribution("routingInformation") == null) {
+		if(this.getContribution("routingInformation") == null) {
 			this.addContribution("routingInformation", new RoutedEntityItemSaveHandler(this));
 		} else {
-			RoutedEntityItemSaveHandler settings = (RoutedEntityItemSaveHandler) entityItem.getContribution("routingInformation");
+			RoutedEntityItemSaveHandler settings = (RoutedEntityItemSaveHandler) this.getContribution("routingInformation");
 
 			/* clear destination on load for activerouted items
 			 * we'll have to keep this until active requesters are smarter about remebering things over unload/reload
@@ -311,12 +311,9 @@ public class RoutedEntityItem extends EntityPassiveItem implements IRoutedItem{
 
 	@Override
 	public IRoutedItem getCopy() {
-		EntityPassiveItem Entityitem = new EntityPassiveItem(worldObj, entityId);
-		Entityitem.setContainer(container);
-		Entityitem.setPosition(position.x, position.y, position.z);
-		Entityitem.setSpeed(speed);
-		Entityitem.setItemStack(item.copy());
-		RoutedEntityItem routed = new RoutedEntityItem(worldObj, Entityitem);
+		RoutedEntityItem routed = new RoutedEntityItem(worldObj,position.x, position.y, position.z, thisItem);
+		routed.setContainer(container);
+		routed.setSpeed(speed);
 		routed.destinationint = destinationint;
 		routed._doNotBuffer = _doNotBuffer;
 		routed.bufferCounter = bufferCounter;

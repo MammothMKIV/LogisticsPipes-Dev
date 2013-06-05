@@ -29,6 +29,7 @@ import logisticspipes.proxy.MainProxy;
 import logisticspipes.proxy.SimpleServiceLocator;
 import logisticspipes.routing.RoutedEntityItem;
 import logisticspipes.utils.InventoryHelper;
+import logisticspipes.utils.ItemIdentifierStack;
 import logisticspipes.utils.Pair;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -43,10 +44,10 @@ import buildcraft.api.transport.IPipedItem;
 import buildcraft.core.EntityPassiveItem;
 import buildcraft.core.proxy.CoreProxy;
 import buildcraft.core.utils.Utils;
-import buildcraft.transport.EntityData;
+import buildcraft.transport.EntityData; // needed for PipeTransportItems functions.
 import buildcraft.transport.IItemTravelingHook;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.transport.PipeTransportItems;// is extended by this class
+import buildcraft.transport.TileGenericPipe; // can not remove this because we need to detect PipeTransportItems, which is only exposed by pipe.getTransport; IPipe does not expose the transport.
 
 public class PipeTransportLogistics extends PipeTransportItems implements IItemTravelingHook {
 
@@ -134,8 +135,9 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 				if (currentTimeOut > 0){
 					next.getValue().setValue1(currentTimeOut - 1);
 				} else {
-					EntityPassiveItem item = new EntityPassiveItem(worldObj, this.xCoord + 0.5F, this.yCoord + Utils.getPipeFloorOf(next.getKey()) - 0.1, this.zCoord + 0.5, next.getKey());
-					IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(worldObj, item);
+//					EntityPassiveItem item = new EntityPassiveItem(worldObj, this.xCoord + 0.5F, this.yCoord + Utils.getPipeFloorOf(next.getKey()) - 0.1, this.zCoord + 0.5, next.getKey());
+					IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(worldObj, this.xCoord + 0.5, this.yCoord + Utils.getPipeFloorOf(next.getKey()) - 0.1, this.zCoord + 0.5, ItemIdentifierStack.GetFromStack(next.getKey()));
+//					IRoutedItem routedItem = new RoutedEntityItem(worldObj, this.xCoord + 0.5, this.yCoord + Utils.getPipeFloorOf(next.getKey()) - 0.1, this.zCoord + 0.5, ItemIdentifierStack.GetFromStack(next.getKey()));
 					routedItem.setDoNotBuffer(true);
 					routedItem.setBufferCounter(next.getValue().getValue2() + 1);
 					toAdd.add(routedItem);
@@ -320,8 +322,7 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 						IRoutedItem routed = (IRoutedItem) data.item;
 						IRoutedItem newItem = routed.getCopy();
 						newItem.setItemStack(added);
-						EntityData addedData = new EntityData(newItem.getEntityPassiveItem(), data.input);
-						insertedItemStack(addedData, tile);
+						insertedItemStack(newItem, tile);
 					}
 				} else {
 					ForgeDirection[] dirs = manager.getCombinedSneakyOrientation();
@@ -336,9 +337,8 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 						if(data.item instanceof IRoutedItem) {
 							IRoutedItem routed = (IRoutedItem) data.item;
 							IRoutedItem newItem = routed.getCopy();
-							newItem.setItemStack(added);
-							EntityData addedData = new EntityData(newItem.getEntityPassiveItem(), data.input);
-							insertedItemStack(addedData, tile);
+							newItem.setItemStack(added); // perhaps no need to copy - pipeItemsInvSysConnector will only pipe.addItem(newItem.x,y,z) -- i don't think it will modify it at all.
+							insertedItemStack(newItem, tile);
 						}
 						if(data.item.getItemStack().stackSize <= 0) break;
 					}
@@ -390,7 +390,7 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 		}
 	}
 
-	protected void insertedItemStack(EntityData data, TileEntity tile) {}
+	protected void insertedItemStack(IRoutedItem data, TileEntity tile) {}
 	
 	/* --- IItemTravelHook --- */
 	@SuppressWarnings("unchecked")

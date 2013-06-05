@@ -3,6 +3,8 @@ package logisticspipes.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import buildcraft.api.transport.IPipeTile;
+
 import logisticspipes.LogisticsPipes;
 import logisticspipes.pipes.PipeItemsCraftingLogistics;
 import logisticspipes.pipes.basic.CoreRoutedPipe;
@@ -11,7 +13,7 @@ import logisticspipes.utils.OrientationsUtil;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.transport.TileGenericPipe;
+//import buildcraft.transport.TileGenericPipe;
 
 public class LogisticsSignTileEntity extends TileEntity {
 	
@@ -57,20 +59,20 @@ public class LogisticsSignTileEntity extends TileEntity {
 	private CoreRoutedPipe[] getNearRoutingPipes() {
 		List<CoreRoutedPipe> list = new ArrayList<CoreRoutedPipe>();
 		TileEntity tile = worldObj.getBlockTileEntity(xCoord + 1,yCoord,zCoord);
-		if(tile instanceof TileGenericPipe && ((TileGenericPipe)tile).pipe instanceof CoreRoutedPipe) {
-			list.add((CoreRoutedPipe) ((TileGenericPipe)tile).pipe);
+		if(tile instanceof IPipeTile && ((IPipeTile)tile).getPipe() instanceof CoreRoutedPipe) {
+			list.add((CoreRoutedPipe) ((IPipeTile)tile).getPipe());
 		}
 		tile = worldObj.getBlockTileEntity(xCoord - 1,yCoord,zCoord);
-		if(tile instanceof TileGenericPipe && ((TileGenericPipe)tile).pipe instanceof CoreRoutedPipe) {
-			list.add((CoreRoutedPipe) ((TileGenericPipe)tile).pipe);
+		if(tile instanceof IPipeTile && ((IPipeTile)tile).getPipe() instanceof CoreRoutedPipe) {
+			list.add((CoreRoutedPipe) ((IPipeTile)tile).getPipe());
 		}
 		tile = worldObj.getBlockTileEntity(xCoord,yCoord,zCoord + 1);
-		if(tile instanceof TileGenericPipe && ((TileGenericPipe)tile).pipe instanceof CoreRoutedPipe) {
-			list.add((CoreRoutedPipe) ((TileGenericPipe)tile).pipe);
+		if(tile instanceof IPipeTile && ((IPipeTile)tile).getPipe() instanceof CoreRoutedPipe) {
+			list.add((CoreRoutedPipe) ((IPipeTile)tile).getPipe());
 		}
 		tile = worldObj.getBlockTileEntity(xCoord,yCoord,zCoord - 1);
-		if(tile instanceof TileGenericPipe && ((TileGenericPipe)tile).pipe instanceof CoreRoutedPipe) {
-			list.add((CoreRoutedPipe) ((TileGenericPipe)tile).pipe);
+		if(tile instanceof IPipeTile && ((IPipeTile)tile).getPipe() instanceof CoreRoutedPipe) {
+			list.add((CoreRoutedPipe) ((IPipeTile)tile).getPipe());
 		}
 		return list.toArray(new CoreRoutedPipe[]{});
 	}

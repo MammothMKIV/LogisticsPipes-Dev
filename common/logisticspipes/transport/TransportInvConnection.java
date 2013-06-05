@@ -1,5 +1,6 @@
 package logisticspipes.transport;
 
+import logisticspipes.logisticspipes.IRoutedItem;
 import logisticspipes.pipes.PipeItemsInvSysConnector;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -16,9 +17,9 @@ public class TransportInvConnection extends PipeTransportLogistics {
 	}
 	
 	@Override
-	protected void insertedItemStack(EntityData data, TileEntity tile) {
+	protected void insertedItemStack(IRoutedItem routed, TileEntity tile) {
 		if(tile instanceof IInventory) {
-			((PipeItemsInvSysConnector)this.container.pipe).handleItemEnterInv(data,tile);
+			((PipeItemsInvSysConnector)this.container.pipe).handleItemEnterInv(routed,tile);
 		}
 	}
 }

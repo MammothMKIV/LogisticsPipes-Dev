@@ -215,7 +215,7 @@ public abstract class LiquidRoutedPipe extends CoreRoutedPipe implements IItemTr
 			//If liquids still exist,
 			liquid.amount -= filled;
 
-			IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(SimpleServiceLocator.logisticsLiquidManager.getLiquidContainer(liquid), worldObj);
+			IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(worldObj, SimpleServiceLocator.logisticsLiquidManager.getLiquidContainer(liquid));
 			Pair<Integer, Integer> replies = SimpleServiceLocator.logisticsLiquidManager.getBestReply(liquid, this.getRouter(), routedItem.getJamList());
 			int dest = replies.getValue1();
 			routedItem.setDestination(dest);

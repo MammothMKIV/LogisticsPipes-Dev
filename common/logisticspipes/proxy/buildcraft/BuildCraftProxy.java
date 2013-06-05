@@ -57,6 +57,7 @@ import logisticspipes.pipes.PipeLogisticsChassiMk5;
 import logisticspipes.pipes.basic.CoreRoutedPipe;
 import logisticspipes.pipes.basic.liquid.LogisticsLiquidConnectorPipe;
 import logisticspipes.routing.RoutedEntityItem;
+import logisticspipes.utils.ItemIdentifierStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -67,6 +68,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.BuildCraftTransport;
+import buildcraft.api.core.Position;
 import buildcraft.api.gates.ActionManager;
 import buildcraft.api.gates.IAction;
 import buildcraft.api.gates.ITrigger;
@@ -168,7 +170,7 @@ public class BuildCraftProxy {
 
 	public IRoutedItem GetOrCreateRoutedItem(World worldObj, EntityData itemData) {
 		if (!isRoutedItem(itemData.item)){
-			RoutedEntityItem newItem = new RoutedEntityItem(worldObj, itemData.item);
+			RoutedEntityItem newItem = CreateRoutedItem(worldObj, itemData.item);
 			itemData.item = newItem;
 			return newItem;
 		}
@@ -183,14 +185,23 @@ public class BuildCraftProxy {
 		return (IRoutedItem) item;
 	}
 	
-	public IRoutedItem CreateRoutedItem(World worldObj, IPipedItem item) {
-		RoutedEntityItem newItem = new RoutedEntityItem(worldObj, item);
+	public RoutedEntityItem CreateRoutedItem(World worldObj, IPipedItem item) {
+		RoutedEntityItem newItem = CreateRoutedItem(worldObj,item.getItemStack());
+		Position pos=item.getPosition();
+		newItem.SetPosition(pos.x, pos.y, pos.z);
+		newItem.setSpeed(item.getSpeed());
 		return newItem;
 	}
 
-	public IRoutedItem CreateRoutedItem(ItemStack payload, World worldObj) {
-		EntityPassiveItem entityItem = new EntityPassiveItem(worldObj, 0, 0, 0, payload);
-		return CreateRoutedItem(worldObj, entityItem);
+	public RoutedEntityItem CreateRoutedItem(World worldObj, double x, double y,
+			double z, ItemIdentifierStack payload) {
+		RoutedEntityItem newItem = new RoutedEntityItem(worldObj, x, y, z, payload);
+		return null;
+	}
+	public RoutedEntityItem CreateRoutedItem(World worldObj, ItemStack payload) {
+//		EntityPassiveItem entityItem = new EntityPassiveItem(worldObj, 0, 0, 0, payload);
+//		return CreateRoutedItem(worldObj, entityItem);
+		return CreateRoutedItem(worldObj,0,0,0,ItemIdentifierStack.GetFromStack(payload));
 	}
 
 	public void registerTrigger() {
@@ -324,4 +335,5 @@ public class BuildCraftProxy {
 	public boolean isUpgradeManagerEquipped(EntityPlayer entityplayer) {
 		return entityplayer != null && entityplayer.getCurrentEquippedItem() != null && entityplayer.getCurrentEquippedItem().itemID == LogisticsPipes.LogisticsUpgradeManager.itemID;
 	}
+
 }

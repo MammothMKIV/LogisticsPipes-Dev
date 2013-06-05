@@ -169,7 +169,7 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 			int sent = removed.stackSize;
 			useEnergy(sent * neededEnergy());
 
-			IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(removed, this.worldObj);
+			IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(this.worldObj, removed);
 			routedItem.setDestination(destination);
 			routedItem.setTransportMode(TransportMode.Active);
 			routedItem.addRelayPoints(relays);
