@@ -469,7 +469,7 @@ public class GuiAddMacro extends SubGuiScreen implements IItemSearch {
 					list.appendTag(nbt);
 				}
 				this.mainGui.getDisk().getTagCompound().setTag("macroList", list);
-				MainProxy.sendPacketToServer(new PacketItem(NetworkConstants.DISK_CONTENT, mainGui.pipe.xCoord, mainGui.pipe.yCoord, mainGui.pipe.zCoord, mainGui.pipe.getDisk()).getPacket());
+				MainProxy.sendPacketToServer(new PacketItem(NetworkConstants.DISK_CONTENT, mainGui.pipe.getXPosition(), mainGui.pipe.getYPosition(), mainGui.pipe.getZPosition(), mainGui.pipe.getDisk()).getPacket());
 				this.exitGui();
 			} else if(macroItems.size() != 0) {
 				this.setSubGui(new GuiMessagePopup("Please enter a name"));

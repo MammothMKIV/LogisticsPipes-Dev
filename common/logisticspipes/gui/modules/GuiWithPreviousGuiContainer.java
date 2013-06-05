@@ -7,21 +7,21 @@ import logisticspipes.proxy.MainProxy;
 import logisticspipes.utils.gui.KraphtBaseGuiScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.Container;
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public abstract class GuiWithPreviousGuiContainer extends KraphtBaseGuiScreen implements IGuiIDHandlerProvider {
 	
 	private int prevGuiID = -1;
-	protected Pipe pipe;
+	protected IPipe pipe;
 	private GuiScreen prevGui;
 	
-	public GuiWithPreviousGuiContainer(Container par1Container, Pipe pipe, GuiScreen prevGui) {
+	public GuiWithPreviousGuiContainer(Container par1Container, IPipe pipe2, GuiScreen prevGui) {
 		super(par1Container);
 		this.prevGui = prevGui;
 		if(prevGui instanceof IGuiIDHandlerProvider) {
 			this.prevGuiID = ((IGuiIDHandlerProvider)prevGui).getGuiID();
 		}
-		this.pipe = pipe;
+		this.pipe = pipe2;
 	}
 	
 	public GuiScreen getprevGui() {
@@ -37,7 +37,7 @@ public abstract class GuiWithPreviousGuiContainer extends KraphtBaseGuiScreen im
 		if (i == 1 || c == 'e') {
 			if (prevGuiID != -1) {
 				super.keyTyped(c,i);
-				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.GUI_BACK_PACKET, pipe.xCoord, pipe.yCoord, pipe.zCoord, prevGuiID + 10000).getPacket());
+				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.GUI_BACK_PACKET, pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), prevGuiID + 10000).getPacket());
 			} else {
 				super.keyTyped(c, i);
 			}

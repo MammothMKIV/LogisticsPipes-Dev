@@ -21,7 +21,7 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiItemSink extends GuiWithPreviousGuiContainer {
 
@@ -50,7 +50,7 @@ public class GuiItemSink extends GuiWithPreviousGuiContainer {
 				_itemSink.setDefaultRoute(!_itemSink.isDefaultRoute());
 				//((GuiButton)buttonList.get(0)).displayString = _itemSink.isDefaultRoute() ? "Yes" : "No";
 				if(slot >= 0) {
-					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ITEM_SINK_DEFAULT, pipe.xCoord, pipe.yCoord, pipe.zCoord, (_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).getPacket());
+					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ITEM_SINK_DEFAULT,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), (_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).getPacket());
 				} else {
 					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ITEM_SINK_DEFAULT, 0, -1, 0, (_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).getPacket());
 				}
@@ -59,7 +59,7 @@ public class GuiItemSink extends GuiWithPreviousGuiContainer {
 		
 	}
 	
-	public GuiItemSink(IInventory playerInventory, Pipe pipe, ModuleItemSink itemSink, GuiScreen previousGui, int slot) {
+	public GuiItemSink(IInventory playerInventory, IPipe pipe, ModuleItemSink itemSink, GuiScreen previousGui, int slot) {
 		super(null,pipe,previousGui);
 		_itemSink = itemSink;
 		this.slot = slot;

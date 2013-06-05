@@ -16,14 +16,14 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiTerminus extends GuiWithPreviousGuiContainer {
 
 	private final ModuleTerminus _terminus;
 	
 	
-	public GuiTerminus(IInventory playerInventory, Pipe pipe, ModuleTerminus terminus, GuiScreen previousGui) {
+	public GuiTerminus(IInventory playerInventory, IPipe pipe, ModuleTerminus terminus, GuiScreen previousGui) {
 		super(null,pipe,previousGui);
 		_terminus = terminus;
 		DummyContainer dummy = new DummyContainer(playerInventory, _terminus.getFilterInventory());

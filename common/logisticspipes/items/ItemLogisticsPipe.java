@@ -17,14 +17,14 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 
 import buildcraft.core.utils.Localization;
-import buildcraft.transport.ItemPipe;
-import buildcraft.transport.Pipe;
+import buildcraft.transport.ItemPipe; // we extend this.
+import buildcraft.api.transport.IPipe;
 
 /**
  * A logistics pipe Item
  */
 public class ItemLogisticsPipe extends ItemPipe {
-	public ItemLogisticsPipe(int key, Class<? extends Pipe> clas) {
+	public ItemLogisticsPipe(int key, Class<? extends IPipe> clas) {
 		super(key);
 		//setCreativeTab(LogisticsPipes.LPCreativeTab);
 		//setUnlocalizedName(clas.getSimpleName());

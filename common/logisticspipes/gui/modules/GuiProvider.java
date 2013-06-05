@@ -13,17 +13,17 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiProvider extends GuiWithPreviousGuiContainer {
 	
 	private final IInventory _playerInventory;
 	private final ModuleProvider _provider;
-	private final Pipe _pipe;
+	private final IPipe _pipe;
 	private final int _slot;
 
 
-	public GuiProvider(IInventory playerInventory, Pipe pipe, ModuleProvider provider, GuiScreen previousGui, int slot) {
+	public GuiProvider(IInventory playerInventory, IPipe pipe, ModuleProvider provider, GuiScreen previousGui, int slot) {
 		super(null,pipe,previousGui);
 		_playerInventory = playerInventory;
 		_provider = provider;
@@ -67,14 +67,14 @@ public class GuiProvider extends GuiWithPreviousGuiContainer {
 		if (guibutton.id == 0){
 			_provider.setFilterExcluded(!_provider.isExcludeFilter());
 			if(_slot >= 0) {
-				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_CHANGE_INCLUDE, _pipe.xCoord, _pipe.yCoord, _pipe.zCoord, _slot).getPacket());
+				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_CHANGE_INCLUDE, _pipe.getXPosition(), _pipe.getYPosition(), _pipe.getZPosition(), _slot).getPacket());
 			} else {
 				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_CHANGE_INCLUDE, _provider.getX(), _provider.getY(), _provider.getZ(), _slot).getPacket());	
 			}
 		} else if (guibutton.id  == 1){
 			_provider.nextExtractionMode();
 			if(_slot >= 0) {
-				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_NEXT_MODE, _pipe.xCoord, _pipe.yCoord, _pipe.zCoord, _slot).getPacket());
+				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_NEXT_MODE, _pipe.getXPosition(), _pipe.getYPosition(), _pipe.getZPosition(), _slot).getPacket());
 			} else {
 				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_NEXT_MODE, _provider.getX(), _provider.getY(), _provider.getZ(), _slot).getPacket());
 				}

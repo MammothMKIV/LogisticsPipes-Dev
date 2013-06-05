@@ -25,6 +25,8 @@ import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import buildcraft.api.transport.IPipeTile;
+
 import logisticspipes.LogisticsPipes;
 import logisticspipes.api.ILogisticsPowerProvider;
 import logisticspipes.config.Configs;
@@ -48,7 +50,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidStack;
-import buildcraft.transport.TileGenericPipe;
 
 public class ServerRouter implements IRouter, Comparable<ServerRouter> {
 	
@@ -250,12 +251,12 @@ public class ServerRouter implements IRouter, Comparable<ServerRouter> {
 		}
 		TileEntity tile = worldObj.getBlockTileEntity(_xCoord, _yCoord, _zCoord);
 		
-		if (!(tile instanceof TileGenericPipe)) return null;
-		TileGenericPipe pipe = (TileGenericPipe) tile;
-		if (!(pipe.pipe instanceof CoreRoutedPipe)) return null;
-		_myPipeCache=new WeakReference<CoreRoutedPipe>((CoreRoutedPipe) pipe.pipe);
+		if (!(tile instanceof IPipeTile)) return null;
+		IPipeTile pipe = (IPipeTile) tile;
+		if (!(pipe.getPipe() instanceof CoreRoutedPipe)) return null;
+		_myPipeCache=new WeakReference<CoreRoutedPipe>((CoreRoutedPipe) pipe.getPipe());
 
-		return (CoreRoutedPipe) pipe.pipe;
+		return (CoreRoutedPipe) pipe.getPipe();
 	}
 
 	@Override
@@ -330,7 +331,7 @@ public class ServerRouter implements IRouter, Comparable<ServerRouter> {
 			if(changed) {
 				CoreRoutedPipe pipe = getPipe();
 				if (pipe != null) {
-					pipe.worldObj.notifyBlocksOfNeighborChange(pipe.xCoord, pipe.yCoord, pipe.zCoord, pipe.worldObj.getBlockId(pipe.xCoord, pipe.yCoord, pipe.zCoord));
+					pipe.getWorld().notifyBlocksOfNeighborChange(pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), pipe.worldObj.getBlockId(pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition()));
 					pipe.refreshConnectionAndRender(false);
 				}
 			}

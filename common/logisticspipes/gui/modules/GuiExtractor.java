@@ -21,7 +21,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiExtractor extends GuiWithPreviousGuiContainer {
 
@@ -30,7 +30,7 @@ public class GuiExtractor extends GuiWithPreviousGuiContainer {
 	private final ISneakyDirectionReceiver _directionReceiver;
 	private int slot;
 	
-	public GuiExtractor(IInventory playerInventory, Pipe pipe, ISneakyDirectionReceiver directionReceiver, GuiScreen previousGui, int slot) {
+	public GuiExtractor(IInventory playerInventory, IPipe pipe, ISneakyDirectionReceiver directionReceiver, GuiScreen previousGui, int slot) {
 		super(new DummyContainer(playerInventory, null),pipe,previousGui);
 		_directionReceiver = directionReceiver;
 		xSize = 160;
@@ -69,7 +69,7 @@ public class GuiExtractor extends GuiWithPreviousGuiContainer {
 		_directionReceiver.setSneakyDirection(ForgeDirection.getOrientation(guibutton.id));
 		
 		if(slot >= 0) {
-			MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.EXTRACTOR_MODULE_DIRECTION_SET, pipe.xCoord, pipe.yCoord, pipe.zCoord, _directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).getPacket());
+			MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.EXTRACTOR_MODULE_DIRECTION_SET,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), _directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).getPacket());
 		} else {
 			MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.EXTRACTOR_MODULE_DIRECTION_SET, 0, -1, _directionReceiver.getZ(), _directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).getPacket());	
 		}

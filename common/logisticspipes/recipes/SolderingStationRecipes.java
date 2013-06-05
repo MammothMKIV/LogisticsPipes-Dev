@@ -11,9 +11,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import buildcraft.BuildCraftFactory;
-import buildcraft.BuildCraftSilicon;
-import buildcraft.BuildCraftTransport;
+import buildcraft.BuildCraftFactory; // for the hopper
+import buildcraft.BuildCraftSilicon; // for various chipsets
+import buildcraft.BuildCraftTransport; // for iron pipes
 
 public class SolderingStationRecipes {
 	

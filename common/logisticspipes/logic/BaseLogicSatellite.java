@@ -151,7 +151,7 @@ public class BaseLogicSatellite extends BaseRoutingLogic implements IRequireReli
 		final Iterator<ItemIdentifierStack> iterator = _lostItems.iterator();
 		while (iterator.hasNext()) {
 			ItemIdentifierStack stack = iterator.next();
-			int received = RequestTree.requestPartial(stack, (CoreRoutedPipe) container.pipe);
+			int received = RequestTree.requestPartial(stack, (CoreRoutedPipe) container.getPipe());
 			if(received > 0) {
 				if(received == stack.stackSize) {
 					iterator.remove();

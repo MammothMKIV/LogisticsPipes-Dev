@@ -21,7 +21,7 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiAdvancedExtractor extends GuiWithPreviousGuiContainer {
 
@@ -50,14 +50,14 @@ public class GuiAdvancedExtractor extends GuiWithPreviousGuiContainer {
 			case 0:
 				_advancedExtractor.setItemsIncluded(!_advancedExtractor.areItemsIncluded());
 				if(slot >= 0) {
-					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ADVANCED_EXTRACTOR_MODULE_INCLUDED_SET, pipe.xCoord, pipe.yCoord, pipe.zCoord, (_advancedExtractor.areItemsIncluded() ? 1 : 0) + (slot * 10)).getPacket());
+					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ADVANCED_EXTRACTOR_MODULE_INCLUDED_SET,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), (_advancedExtractor.areItemsIncluded() ? 1 : 0) + (slot * 10)).getPacket());
 				} else {
 					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ADVANCED_EXTRACTOR_MODULE_INCLUDED_SET, 0, -1, 0, (_advancedExtractor.areItemsIncluded() ? 1 : 0) + (slot * 10)).getPacket());	
 				}
 				break;
 			case 1:
 				if(slot >= 0) {
-					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ADVANCED_EXTRACTOR_MODULE_SNEAKY_GUI, pipe.xCoord, pipe.yCoord, pipe.zCoord, slot).getPacket());
+					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ADVANCED_EXTRACTOR_MODULE_SNEAKY_GUI,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), slot).getPacket());
 				} else {
 					MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ADVANCED_EXTRACTOR_MODULE_SNEAKY_GUI, _advancedExtractor.getX(), -1, _advancedExtractor.getZ(), slot).getPacket());
 				}
@@ -66,7 +66,7 @@ public class GuiAdvancedExtractor extends GuiWithPreviousGuiContainer {
 		
 	}
 	
-	public GuiAdvancedExtractor(IInventory playerInventory, Pipe pipe, ModuleAdvancedExtractor advancedExtractor, GuiScreen previousGui, int slot) {
+	public GuiAdvancedExtractor(IInventory playerInventory, IPipe pipe, ModuleAdvancedExtractor advancedExtractor, GuiScreen previousGui, int slot) {
 		super(null,pipe,previousGui);
 		_advancedExtractor = advancedExtractor;
 		this.slot = slot;

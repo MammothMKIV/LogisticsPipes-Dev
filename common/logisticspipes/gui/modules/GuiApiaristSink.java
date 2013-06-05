@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Icon;
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,7 +25,7 @@ public class GuiApiaristSink extends GuiWithPreviousGuiContainer {
 	private final ModuleApiaristSink module;
 	private int slot;
 	
-	public GuiApiaristSink(ModuleApiaristSink module, EntityPlayer player, Pipe pipe, GuiScreen previousGui, int slot) {
+	public GuiApiaristSink(ModuleApiaristSink module, EntityPlayer player, IPipe pipe, GuiScreen previousGui, int slot) {
 		super(new DummyContainer(player.inventory,null), pipe, previousGui);
 		this.module = module;
 		this.slot = slot;
@@ -85,7 +85,7 @@ public class GuiApiaristSink extends GuiWithPreviousGuiContainer {
 				setting.FilterTypeDown();
 			}
 			if(gui.slot > 0) {
-				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE, pipe.xCoord, pipe.yCoord, pipe.zCoord, gui.slot, row, 3, setting.filterType.ordinal());
+				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), gui.slot, row, 3, setting.filterType.ordinal());
 				MainProxy.sendPacketToServer(packet.getPacket());
 			} else {
 				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE, 0, -1, -1-slot, 20, row, 3, setting.filterType.ordinal());
@@ -158,7 +158,7 @@ public class GuiApiaristSink extends GuiWithPreviousGuiContainer {
 				setting.filterGroupDown();
 			}
 			if(gui.slot >= 0) {
-				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE, pipe.xCoord, pipe.yCoord, pipe.zCoord, gui.slot, row, 2, setting.filterGroup);
+				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), gui.slot, row, 2, setting.filterGroup);
 				MainProxy.sendPacketToServer(packet.getPacket());
 			} else {
 				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE, module.getX(), module.getY(), module.getZ(), gui.slot, row, 2, setting.filterGroup);
@@ -274,7 +274,7 @@ public class GuiApiaristSink extends GuiWithPreviousGuiContainer {
 				}
 			}
 			if(slot < 0) {
-				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE, pipe.xCoord, pipe.yCoord, pipe.zCoord, gui.slot, row, slotNumber, slotNumber == 0 ? setting.firstBee : setting.secondBee);
+				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), gui.slot, row, slotNumber, slotNumber == 0 ? setting.firstBee : setting.secondBee);
 				MainProxy.sendPacketToServer(packet.getPacket());
 			} else {
 				PacketPipeBeePacket packet = new PacketPipeBeePacket(NetworkConstants.BEE_MODULE_SET_BEE, module.getX(), module.getY(), module.getZ(), gui.slot, row, slotNumber, 0);

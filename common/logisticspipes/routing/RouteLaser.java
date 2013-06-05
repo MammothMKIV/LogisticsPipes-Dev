@@ -101,8 +101,8 @@ class RouteLaser implements IPaintPath{
 				
 				//Paint that route
 				LinkedList<IRouter> discovered = new LinkedList<IRouter>();
-				Position firstPos = new Position(nextRouter.getPipe().container.xCoord, nextRouter.getPipe().container.yCoord, nextRouter.getPipe().zCoord, next);
-				addLeg(r.getPipe().worldObj, firstPos, next);
+				Position firstPos = new Position(nextRouter.getPipe().getXPosition(), nextRouter.getPipe().getYPosition(), nextRouter.getPipe().getZPosition(), next);
+				addLeg(r.getPipe().getWorld(), firstPos, next);
 				HashMap<CoreRoutedPipe, ExitRoute> result = PathFinder.paintAndgetConnectedRoutingPipes(nextRouter.getPipe().container, next, 50, 100, this);
 				
 				for(CoreRoutedPipe pipe : result.keySet()){

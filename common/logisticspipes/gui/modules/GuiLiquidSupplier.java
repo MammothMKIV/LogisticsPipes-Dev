@@ -16,14 +16,14 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiLiquidSupplier extends GuiWithPreviousGuiContainer {
 
 	private final ModuleLiquidSupplier _liquidSupplier;
 	
 	
-	public GuiLiquidSupplier(IInventory playerInventory, Pipe pipe, ModuleLiquidSupplier liquidSupplier, GuiScreen previousGui) {
+	public GuiLiquidSupplier(IInventory playerInventory, IPipe pipe, ModuleLiquidSupplier liquidSupplier, GuiScreen previousGui) {
 		super(null,pipe,previousGui);
 		_liquidSupplier = liquidSupplier;
 		DummyContainer dummy = new DummyContainer(playerInventory, _liquidSupplier.getFilterInventory());

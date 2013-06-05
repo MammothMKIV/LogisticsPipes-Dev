@@ -80,24 +80,24 @@ public class RemoteOrderer extends Item {
 		if(!par1ItemStack.hasTagCompound()) {
 			return par1ItemStack;
     	}
-		PipeItemsRemoteOrdererLogistics pipe = getPipe(par1ItemStack);
+		IPipe pipe = getPipe(par1ItemStack);
 		if(pipe != null) {
 			if(MainProxy.isServer(par3EntityPlayer.worldObj)) {
-				MainProxy.sendPacketToPlayer(new PacketInteger(NetworkConstants.REQUEST_GUI_DIMENSION, MainProxy.getDimensionForWorld(pipe.worldObj)).getPacket(), (Player)par3EntityPlayer);
-				par3EntityPlayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Orderer_ID, pipe.worldObj, pipe.xCoord, pipe.yCoord, pipe.zCoord);
+				MainProxy.sendPacketToPlayer(new PacketInteger(NetworkConstants.REQUEST_GUI_DIMENSION, MainProxy.getDimensionForWorld(pipe.getWorld())).getPacket(), (Player)par3EntityPlayer);
+				par3EntityPlayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Orderer_ID, pipe.getWorld(), pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition());
 			}
 		}
 		return par1ItemStack;
     }
 	
-	public static void connectToPipe(ItemStack stack, PipeItemsRemoteOrdererLogistics pipe) {
+	public static void connectToPipe(ItemStack stack, IPipe pipe) {
 		stack.stackTagCompound = new NBTTagCompound();
-		stack.stackTagCompound.setInteger("connectedPipe-x", pipe.xCoord);
-		stack.stackTagCompound.setInteger("connectedPipe-y", pipe.yCoord);
-		stack.stackTagCompound.setInteger("connectedPipe-z", pipe.zCoord);
+		stack.stackTagCompound.setInteger("connectedPipe-x", pipe.getXPosition());
+		stack.stackTagCompound.setInteger("connectedPipe-y", pipe.getYPosition());
+		stack.stackTagCompound.setInteger("connectedPipe-z", pipe.getZPosition());
 		int dimension = 0;
 		for(Integer dim:DimensionManager.getIDs()) {
-			if(pipe.worldObj.equals(DimensionManager.getWorld(dim.intValue()))) {
+			if(pipe.getWorld().equals(DimensionManager.getWorld(dim.intValue()))) {
 				dimension = dim.intValue();
 				break;
 			}
@@ -105,7 +105,7 @@ public class RemoteOrderer extends Item {
 		stack.stackTagCompound.setInteger("connectedPipe-world-dim", dimension);
 	}
 	
-	public static PipeItemsRemoteOrdererLogistics getPipe(ItemStack stack) {
+	public static IPipe getPipe(ItemStack stack) {
 		if(stack == null) {
 			return null;
     	}

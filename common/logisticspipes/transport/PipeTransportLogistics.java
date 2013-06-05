@@ -41,9 +41,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.transport.IPipeEntry;
 import buildcraft.api.transport.IPipedItem;
-import buildcraft.core.EntityPassiveItem;
-import buildcraft.core.proxy.CoreProxy;
-import buildcraft.core.utils.Utils;
+import buildcraft.core.utils.Utils; // used for pipe floor, and getNormalSpeed.
 import buildcraft.transport.EntityData; // needed for PipeTransportItems functions.
 import buildcraft.transport.IItemTravelingHook;
 import buildcraft.transport.PipeTransportItems;// is extended by this class
@@ -296,7 +294,7 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 			((PipeTransportItems) pipe.pipe.transport).entityEntering(data.item, data.output);
 		} else if (tile instanceof IInventory) {
 			if(!isItemExitable(data.item.getItemStack())) return;
-			if (!CoreProxy.proxy.isRenderWorld(worldObj)) {
+			if (!worldObj.isRemote) {
 				//LogisticsPipes start
 				//last chance for chassi to back out
 				if(data.item instanceof IRoutedItem) {

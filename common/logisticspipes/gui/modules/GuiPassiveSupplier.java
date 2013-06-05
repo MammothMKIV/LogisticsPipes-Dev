@@ -16,14 +16,14 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiPassiveSupplier extends GuiWithPreviousGuiContainer {
 
 	private final ModulePassiveSupplier _supplier;
 	
 	
-	public GuiPassiveSupplier(IInventory playerInventory, Pipe pipe, ModulePassiveSupplier supplier, GuiScreen previousGui) {
+	public GuiPassiveSupplier(IInventory playerInventory, IPipe pipe, ModulePassiveSupplier supplier, GuiScreen previousGui) {
 		super(null,pipe,previousGui);
 		_supplier = supplier;
 		DummyContainer dummy = new DummyContainer(playerInventory, _supplier.getFilterInventory());

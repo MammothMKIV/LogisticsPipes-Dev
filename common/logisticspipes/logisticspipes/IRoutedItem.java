@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.transport.IPipedItem;
-import buildcraft.core.EntityPassiveItem;
 
 /**
  * This interface describes the actions that must be available on an item that is considered routed
@@ -74,7 +73,7 @@ public interface IRoutedItem{
 	//public void setSpeedBoost(float multiplier);
 	//public float getSpeedBoost();
 	
-	public EntityPassiveItem getEntityPassiveItem();
+	public IPipedItem getEntityPassiveItem();
 	public IPipedItem getNewEntityPassiveItem();
 	
 	public void setArrived(boolean flag);

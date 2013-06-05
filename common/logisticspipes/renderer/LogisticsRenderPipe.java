@@ -35,7 +35,7 @@ import buildcraft.core.render.RenderEntityBlock;
 import buildcraft.core.render.RenderEntityBlock.BlockInterface;
 import buildcraft.core.utils.Utils;
 import buildcraft.transport.Pipe;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.transport.TileGenericPipe; // renderLiquids takes a real pipe, cant fall back to IPipe/IPipeTile.
 import buildcraft.transport.render.RenderPipe;
 
 public class LogisticsRenderPipe extends RenderPipe {

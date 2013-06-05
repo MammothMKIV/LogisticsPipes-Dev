@@ -13,7 +13,6 @@ import logisticspipes.utils.OrientationsUtil;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-//import buildcraft.transport.TileGenericPipe;
 
 public class LogisticsSignTileEntity extends TileEntity {
 	

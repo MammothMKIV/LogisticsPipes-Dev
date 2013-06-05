@@ -11,9 +11,9 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidStack;
-import buildcraft.BuildCraftCore;
+import buildcraft.BuildCraftCore; // we use longUpdateFactor and updateFactor
 import buildcraft.api.core.SafeTimeTracker;
-import buildcraft.core.utils.Utils;
+import buildcraft.core.utils.Utils; // 1 instance of Utils.checkPipesConnections
 
 public class PipeLiquidTransportLogistics extends PipeTransportLogistics implements ITankContainer {
 

@@ -26,7 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.network.Player;
 
 public class LogicLiquidSupplierMk2 extends BaseRoutingLogic implements IRequireReliableLiquidTransport {
@@ -51,7 +51,7 @@ public class LogicLiquidSupplierMk2 extends BaseRoutingLogic implements IRequire
 		if(dummyInventory.getStackInSlot(0) == null) return;
 		WorldUtil worldUtil = new WorldUtil(worldObj, xCoord, yCoord, zCoord);
 		for (AdjacentTile tile :  worldUtil.getAdjacentTileEntities(true)){
-			if (!(tile.tile instanceof ITankContainer) || tile.tile instanceof TileGenericPipe) continue;
+			if (!(tile.tile instanceof ITankContainer) || tile.tile instanceof IPipeTile) continue;
 			ITankContainer container = (ITankContainer) tile.tile;
 			if (container.getTanks(ForgeDirection.UNKNOWN) == null || container.getTanks(ForgeDirection.UNKNOWN).length == 0) continue;
 			

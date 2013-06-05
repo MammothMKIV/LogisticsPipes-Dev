@@ -98,7 +98,7 @@ public class GuiChassiPipe extends KraphtBaseGuiScreen implements IGuiIDHandlerP
 		if (guibutton.id >= 0 && guibutton.id <= 7){
 			LogisticsModule module = _chassiPipe.getLogisticsModule().getSubModule(guibutton.id);
 			if (module != null){
-				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.CHASSI_GUI_PACKET_ID,_chassiPipe.xCoord,_chassiPipe.yCoord,_chassiPipe.zCoord,guibutton.id).getPacket());
+				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.CHASSI_GUI_PACKET_ID,_chassiPipe.getXPosition(),_chassiPipe.getYPosition(),_chassiPipe.getZPosition(),guibutton.id).getPacket());
 			}
 		}
 	}

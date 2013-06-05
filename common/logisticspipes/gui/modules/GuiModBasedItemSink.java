@@ -10,7 +10,7 @@ import logisticspipes.utils.gui.SmallGuiButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.IInventory;
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiModBasedItemSink extends GuiWithPreviousGuiContainer {
 	
@@ -21,7 +21,7 @@ public class GuiModBasedItemSink extends GuiWithPreviousGuiContainer {
 	private int mouseX = 0;
 	private int mouseY = 0;
 	
-	public GuiModBasedItemSink(IInventory playerInventory, Pipe pipe, ModuleModBasedItemSink itemSink, GuiScreen previousGui, int slot) {
+	public GuiModBasedItemSink(IInventory playerInventory, IPipe pipe, ModuleModBasedItemSink itemSink, GuiScreen previousGui, int slot) {
 		super(null, pipe, previousGui);
 		
 		_itemSink = itemSink;

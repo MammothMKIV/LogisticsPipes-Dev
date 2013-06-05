@@ -65,7 +65,7 @@ public class GuiDiskPopup extends SubGuiScreen {
 	
 	private void writeDiskName() {
 		editname = false;
-		MainProxy.sendPacketToServer(new PacketPipeString(NetworkConstants.DISK_SET_NAME, mainGui.pipe.xCoord, mainGui.pipe.yCoord, mainGui.pipe.zCoord, name1 + name2).getPacket());
+		MainProxy.sendPacketToServer(new PacketPipeString(NetworkConstants.DISK_SET_NAME, mainGui.pipe.getXPosition(), mainGui.pipe.getYPosition(), mainGui.pipe.getZPosition(), name1 + name2).getPacket());
 		NBTTagCompound nbt = new NBTTagCompound("tag");
 		if(mainGui.getDisk().hasTagCompound()) {
 			nbt = mainGui.getDisk().getTagCompound();
@@ -174,7 +174,7 @@ public class GuiDiskPopup extends SubGuiScreen {
 	}
 
 	private void handleRequest() {
-		MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.DISK_MACRO_REQUEST, mainGui.pipe.xCoord, mainGui.pipe.yCoord, mainGui.pipe.zCoord, selected).getPacket());
+		MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.DISK_MACRO_REQUEST, mainGui.pipe.getXPosition(), mainGui.pipe.getYPosition(), mainGui.pipe.getZPosition(), selected).getPacket());
 	}
 
 	private void handleDelete() {
@@ -199,7 +199,7 @@ public class GuiDiskPopup extends SubGuiScreen {
 		}
 		selected = -1;
 		nbt.setTag("macroList", listnew);
-		MainProxy.sendPacketToServer(new PacketItem(NetworkConstants.DISK_CONTENT, mainGui.pipe.xCoord, mainGui.pipe.yCoord, mainGui.pipe.zCoord, mainGui.pipe.getDisk()).getPacket());
+		MainProxy.sendPacketToServer(new PacketItem(NetworkConstants.DISK_CONTENT, mainGui.pipe.getXPosition(), mainGui.pipe.getYPosition(), mainGui.pipe.getZPosition(), mainGui.pipe.getDisk()).getPacket());
 	}
 
 	private void handleAddEdit() {

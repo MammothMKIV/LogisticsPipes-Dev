@@ -9,14 +9,14 @@ import logisticspipes.utils.gui.DummyContainer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.IInventory;
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiThaumicAspectSink extends GuiWithPreviousGuiContainer {
 	
 	private final ModuleThaumicAspectSink _module;
 	private final SimpleInventory tmpInv;
 	
-	public GuiThaumicAspectSink(IInventory playerInventory, Pipe pipe, ModuleThaumicAspectSink itemSink, GuiScreen previousGui, int slot) {
+	public GuiThaumicAspectSink(IInventory playerInventory, IPipe pipe, ModuleThaumicAspectSink itemSink, GuiScreen previousGui, int slot) {
 		super(null, pipe, previousGui);
 		
 		_module = itemSink;

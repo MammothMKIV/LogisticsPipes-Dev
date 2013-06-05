@@ -27,13 +27,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidStack;
-import buildcraft.BuildCraftCore;
+import buildcraft.BuildCraftCore; // for itemLifespan
 import buildcraft.api.core.Position;
+import buildcraft.api.transport.IPipeTile;
 import buildcraft.api.transport.IPipedItem;
-import buildcraft.core.EntityPassiveItem;
-import buildcraft.core.proxy.CoreProxy;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.core.EntityPassiveItem; // we extend this
 
 public class RoutedEntityItem extends EntityPassiveItem implements IRoutedItem{
 
@@ -88,7 +86,7 @@ public class RoutedEntityItem extends EntityPassiveItem implements IRoutedItem{
 	
 	@Override
 	public EntityItem toEntityItem(ForgeDirection dir) {
-		if (!CoreProxy.proxy.isRenderWorld(worldObj)) {
+		if (!worldObj.isRemote) {
 			if (getItemStack().stackSize <= 0) {
 				return null;
 			}
@@ -139,13 +137,13 @@ public class RoutedEntityItem extends EntityPassiveItem implements IRoutedItem{
 		if (destinationint >= 0) {
 			if (SimpleServiceLocator.routerManager.isRouter(destinationint)){
 				IRouter destinationRouter = SimpleServiceLocator.routerManager.getRouter(destinationint); 
-				if (destinationRouter.getPipe() != null && destinationRouter.getPipe().logic instanceof IRequireReliableTransport){
-					((IRequireReliableTransport)destinationRouter.getPipe().logic).itemLost(ItemIdentifierStack.GetFromStack(item));
+				if (destinationRouter.getPipe() != null && destinationRouter.getPipe().getLogic() instanceof IRequireReliableTransport){
+					((IRequireReliableTransport)destinationRouter.getPipe().getLogic()).itemLost(ItemIdentifierStack.GetFromStack(item));
 				}
-				if (destinationRouter.getPipe() != null && destinationRouter.getPipe().logic instanceof IRequireReliableLiquidTransport) {
+				if (destinationRouter.getPipe() != null && destinationRouter.getPipe().getLogic() instanceof IRequireReliableLiquidTransport) {
 					if(item.getItem() instanceof LogisticsLiquidContainer) {
 						LiquidStack liquid = SimpleServiceLocator.logisticsLiquidManager.getLiquidFromContainer(item);
-						((IRequireReliableLiquidTransport)destinationRouter.getPipe().logic).itemLost(LiquidIdentifier.get(liquid), liquid.amount);
+						((IRequireReliableLiquidTransport)destinationRouter.getPipe().getLogic()).itemLost(LiquidIdentifier.get(liquid), liquid.amount);
 					}
 				}
 			}
@@ -165,13 +163,13 @@ public class RoutedEntityItem extends EntityPassiveItem implements IRoutedItem{
 		if(MainProxy.isClient(this.worldObj)) return;
 		if (destinationint >= 0 && SimpleServiceLocator.routerManager.isRouter(destinationint)){
 			IRouter destinationRouter = SimpleServiceLocator.routerManager.getRouter(destinationint); 
-			if (!arrived && destinationRouter.getPipe() != null && destinationRouter.getPipe().logic instanceof IRequireReliableTransport){
-				((IRequireReliableTransport)destinationRouter.getPipe().logic).itemLost(ItemIdentifierStack.GetFromStack(item));
+			if (!arrived && destinationRouter.getPipe() != null && destinationRouter.getPipe().getLogic() instanceof IRequireReliableTransport){
+				((IRequireReliableTransport)destinationRouter.getPipe().getLogic()).itemLost(ItemIdentifierStack.GetFromStack(item));
 			}
-			if (!arrived && destinationRouter.getPipe() != null && destinationRouter.getPipe().logic instanceof IRequireReliableLiquidTransport) {
+			if (!arrived && destinationRouter.getPipe() != null && destinationRouter.getPipe().getLogic() instanceof IRequireReliableLiquidTransport) {
 				if(item.getItem() instanceof LogisticsLiquidContainer) {
 					LiquidStack liquid = SimpleServiceLocator.logisticsLiquidManager.getLiquidFromContainer(item);
-					((IRequireReliableLiquidTransport)destinationRouter.getPipe().logic).itemLost(LiquidIdentifier.get(liquid), liquid.amount);
+					((IRequireReliableLiquidTransport)destinationRouter.getPipe().getLogic()).itemLost(LiquidIdentifier.get(liquid), liquid.amount);
 				}
 			}
 		}
@@ -249,12 +247,13 @@ public class RoutedEntityItem extends EntityPassiveItem implements IRoutedItem{
 		newItem.setSpeed(this.speed);
 		newItem.setItemStack(this.item.splitStack(this.item.stackSize - itemsToTake));
 		
-		if (this.container instanceof TileGenericPipe && ((TileGenericPipe)this.container).pipe.transport instanceof PipeTransportItems){
-			if (((TileGenericPipe)this.container).pipe instanceof PipeLogisticsChassi){
-				PipeLogisticsChassi chassi = (PipeLogisticsChassi) ((TileGenericPipe)this.container).pipe;
+		if (this.container instanceof IPipeTile ) {//&& ((IPipeTile)this.container).getPipe().getTransport() instanceof PipeTransportItems){
+			if (((IPipeTile)this.container).getPipe() instanceof PipeLogisticsChassi){
+				PipeLogisticsChassi chassi = (PipeLogisticsChassi) ((IPipeTile)this.container).getPipe();
 				chassi.queueRoutedItem(SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(worldObj, newItem), orientation, ItemSendMode.Fast);
 			} else {
 				//this should never happen
+				// it may now happen, if an item ends up in a non itemTranspot pipe.
 				newItem.toEntityItem(orientation);
 			}
 		}

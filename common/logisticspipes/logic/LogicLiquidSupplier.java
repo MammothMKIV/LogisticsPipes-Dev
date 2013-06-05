@@ -34,7 +34,7 @@ import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeTile;
 
 public class LogicLiquidSupplier extends BaseRoutingLogic implements IRequireReliableTransport{
 	
@@ -60,7 +60,7 @@ public class LogicLiquidSupplier extends BaseRoutingLogic implements IRequireRel
 		super.throttledUpdateEntity();
 		WorldUtil worldUtil = new WorldUtil(worldObj, xCoord, yCoord, zCoord);
 		for (AdjacentTile tile :  worldUtil.getAdjacentTileEntities(true)){
-			if (!(tile.tile instanceof ITankContainer) || tile.tile instanceof TileGenericPipe) continue;
+			if (!(tile.tile instanceof ITankContainer) || tile.tile instanceof IPipeTile) continue;
 			ITankContainer container = (ITankContainer) tile.tile;
 			if (container.getTanks(ForgeDirection.UNKNOWN) == null || container.getTanks(ForgeDirection.UNKNOWN).length == 0) continue;
 			

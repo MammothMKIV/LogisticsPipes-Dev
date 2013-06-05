@@ -21,7 +21,7 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiElectricManager extends GuiWithPreviousGuiContainer {
 
@@ -50,7 +50,7 @@ public class GuiElectricManager extends GuiWithPreviousGuiContainer {
 			case 0:
 				_module.setDischargeMode(!_module.isDischargeMode());
 				if(slot >= 0) {
-					MainProxy.sendPacketToServer(new PacketModuleInteger(NetworkConstants.ELECTRIC_MANAGER_SET, pipe.xCoord, pipe.yCoord, pipe.zCoord, slot - 1, (_module.isDischargeMode() ? 1 : 0)).getPacket());
+					MainProxy.sendPacketToServer(new PacketModuleInteger(NetworkConstants.ELECTRIC_MANAGER_SET,  pipe.getXPosition(), pipe.getYPosition(), pipe.getZPosition(), slot - 1, (_module.isDischargeMode() ? 1 : 0)).getPacket());
 				} else {
 					MainProxy.sendPacketToServer(new PacketModuleInteger(NetworkConstants.ELECTRIC_MANAGER_SET, _module.getX(), _module.getY(), _module.getZ(), slot, (_module.isDischargeMode() ? 1 : 0)).getPacket());
 				}
@@ -58,7 +58,7 @@ public class GuiElectricManager extends GuiWithPreviousGuiContainer {
 		}
 	}
 
-	public GuiElectricManager(IInventory playerInventory, Pipe pipe, ModuleElectricManager module, GuiScreen previousGui, int slot) {
+	public GuiElectricManager(IInventory playerInventory, IPipe pipe, ModuleElectricManager module, GuiScreen previousGui, int slot) {
 		super(null,pipe,previousGui);
 		_module = module;
 		this.slot = slot;

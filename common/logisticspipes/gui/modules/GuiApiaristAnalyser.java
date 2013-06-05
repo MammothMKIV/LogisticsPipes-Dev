@@ -8,13 +8,13 @@ import logisticspipes.utils.gui.GuiStringHandlerButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.IInventory;
-import buildcraft.transport.Pipe;
+import buildcraft.api.transport.IPipe;
 
 public class GuiApiaristAnalyser extends GuiWithPreviousGuiContainer {
 
 	private final ModuleApiaristAnalyser module;	
 	
-	public GuiApiaristAnalyser(ModuleApiaristAnalyser module, Pipe pipe, GuiScreen previousGui, IInventory playerInventory) {
+	public GuiApiaristAnalyser(ModuleApiaristAnalyser module, IPipe pipe, GuiScreen previousGui, IInventory playerInventory) {
 		super(new DummyContainer(playerInventory,null), pipe, previousGui);
 		this.module = module;
 		xSize = 120;

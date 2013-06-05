@@ -47,7 +47,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import buildcraft.core.network.TileNetworkData;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.network.Player;
 
 public class BaseLogicCrafting extends BaseRoutingLogic implements IRequireReliableTransport {
@@ -421,7 +421,7 @@ public class BaseLogicCrafting extends BaseRoutingLogic implements IRequireRelia
 			}
 
 			if (!found)
-				found = (tile.tile instanceof IInventory && !(tile.tile instanceof TileGenericPipe));
+				found = (tile.tile instanceof IInventory && !(tile.tile instanceof IPipeTile));
 
 			if (found) {
 				Block block = worldObj.getBlockId(tile.tile.xCoord, tile.tile.yCoord, tile.tile.zCoord) < Block.blocksList.length ? Block.blocksList[worldObj.getBlockId(tile.tile.xCoord, tile.tile.yCoord, tile.tile.zCoord)] : null;

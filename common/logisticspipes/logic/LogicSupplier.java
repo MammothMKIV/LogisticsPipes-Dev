@@ -34,9 +34,7 @@ import logisticspipes.utils.WorldUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
-//import buildcraft.energy.EngineWood;
-import buildcraft.energy.TileEngine;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.network.Player;
 
 public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableTransport{
@@ -92,7 +90,7 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 
 		WorldUtil worldUtil = new WorldUtil(worldObj, xCoord, yCoord, zCoord);
 		for (AdjacentTile tile :  worldUtil.getAdjacentTileEntities(true)){
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeTile) continue;
 			if (!(tile.tile instanceof IInventory)) continue;
 			
 			//Do not attempt to supply redstone engines

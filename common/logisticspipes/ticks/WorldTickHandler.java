@@ -16,8 +16,8 @@ import buildcraft.api.core.Position;
 import buildcraft.core.ITileBufferHolder;
 import buildcraft.core.TileBuffer;
 import buildcraft.transport.EntityData;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.transport.PipeTransportItems; // used in reflection
+import buildcraft.transport.TileGenericPipe; //used all over the place
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
