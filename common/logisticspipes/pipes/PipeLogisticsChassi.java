@@ -80,7 +80,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.Player;
 
@@ -149,7 +149,7 @@ public abstract class PipeLogisticsChassi extends CoreRoutedPipe implements ISim
 		}
 		if(ChassiLogic.orientation != oldOrientation) {
 			clearCache();
-			MainProxy.sendPacketToAllWatchingChunk(getX(), getZ(), MainProxy.getDimensionForWorld(worldObj), PacketHandler.getPacket(PipeUpdate.class).setPayload(getLogisticsNetworkPacket()).setPosX(getX()).setPosY(getY()).setPosZ(getZ()));
+			MainProxy.sendPacketToAllWatchingChunk(getX(), getZ(), MainProxy.getDimensionForWorld(container.worldObj), PacketHandler.getPacket(PipeUpdate.class).setPayload(getLogisticsNetworkPacket()).setPosX(getX()).setPosY(getY()).setPosZ(getZ()));
 			refreshRender(true);
 		}
 	}

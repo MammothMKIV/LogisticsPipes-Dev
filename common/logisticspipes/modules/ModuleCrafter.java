@@ -2,6 +2,8 @@ package logisticspipes.modules;
 
 import java.util.Collection;
 
+import buildcraft.api.transport.IPipeEntry;
+
 import logisticspipes.api.IRoutedPowerProvider;
 import logisticspipes.interfaces.IInventoryUtil;
 import logisticspipes.interfaces.ISendRoutedItem;
@@ -20,7 +22,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.lp_TileGenericPipe;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -80,16 +82,13 @@ public class ModuleCrafter extends LogisticsModule{
 
 	private int spaceFor(ItemIdentifier item){
 		int count=0;
-		WorldUtil wUtil = new WorldUtil(pipe.worldObj,pipe.getX(),pipe.getY(),pipe.getZ());
+		WorldUtil wUtil = new WorldUtil(pipe.getWorld(),pipe.getX(),pipe.getY(),pipe.getZ());
 		for (AdjacentTile tile : wUtil.getAdjacentTileEntities(true)){
 			if (!(tile.tile instanceof IInventory)) continue;
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			IInventory base = (IInventory) tile.tile;
 			if (base instanceof net.minecraft.inventory.ISidedInventory) {
 				base = new SidedInventoryMinecraftAdapter((net.minecraft.inventory.ISidedInventory) base, tile.orientation.getOpposite(),false);
-			}
-			if (base instanceof net.minecraftforge.common.ISidedInventory) {
-				base = new SidedInventoryForgeAdapter((net.minecraftforge.common.ISidedInventory) base, tile.orientation.getOpposite());
 			}
 			IInventoryUtil inv =SimpleServiceLocator.inventoryUtilFactory.getInventoryUtil(base);
 			count += inv.roomForItem(item, 9999);

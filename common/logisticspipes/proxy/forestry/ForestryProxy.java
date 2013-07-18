@@ -14,12 +14,12 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import buildcraft.BuildCraftCore;
-import buildcraft.BuildCraftSilicon;
-import buildcraft.BuildCraftTransport;
+import logistics_bc.BuildCraftCore;
+import logistics_bc.BuildCraftSilicon;
+import logistics_bc.BuildCraftTransport;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -44,7 +44,7 @@ public class ForestryProxy implements IForestryProxy {
 			localize.setAccessible(true);
 			propolis = ItemInterface.getItem("propolis").getItem();
 			pollen = ItemInterface.getItem("pollen").getItem();
-			honey = LiquidDictionary.getLiquid("honey", 1500);
+			honey = FluidRegistry.getFluid("honey", 1500);
 			root = (IBeeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
 			initsuccessful = true;
 		} catch(Exception e) {
@@ -57,7 +57,7 @@ public class ForestryProxy implements IForestryProxy {
 	private Method localize;
 	private Item propolis;
 	private Item pollen;
-	private LiquidStack honey;
+	private FluidStack honey;
 	private final boolean has_all;
 	private IBeeRoot root;
 

@@ -22,8 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.FluidStack;
 
 public class PipeLiquidBasic extends LiquidRoutedPipe implements ILiquidSink {
 	
@@ -57,16 +57,16 @@ public class PipeLiquidBasic extends LiquidRoutedPipe implements ILiquidSink {
 	}
 
 	@Override
-	public int sinkAmount(LiquidStack stack) {
+	public int sinkAmount(FluidStack stack) {
 		if(!guiOpenedBy.isEmpty()) return 0; //Don't sink when the gui is open
 		LiquidIdentifier ident = LiquidIdentifier.get(stack);
 		if(filterInv.getStackInSlot(0) == null) return 0;
-		if(ident != ItemIdentifier.get(filterInv.getStackInSlot(0)).getLiquidIdentifier()) return 0;
+		if(ident != ItemIdentifier.get(filterInv.getStackInSlot(0)).getFluidIdentifier()) return 0;
 		int onTheWay = this.countOnRoute(ident);
 		int freeSpace = -onTheWay;
 		for(Pair<TileEntity,ForgeDirection> pair:getAdjacentTanks(true)) {
 			LogisticsLiquidSection tank = ((PipeLiquidTransportLogistics)this.transport).sideTanks[pair.getValue2().ordinal()];
-			freeSpace += ident.getFreeSpaceInsideTank((ITankContainer)pair.getValue1(), pair.getValue2());
+			freeSpace += ident.getFreeSpaceInsideTank((IFluidHandler)pair.getValue1(), pair.getValue2());
 			freeSpace += ident.getFreeSpaceInsideTank(tank);
 			if(freeSpace >= stack.amount) {
 				return stack.amount;

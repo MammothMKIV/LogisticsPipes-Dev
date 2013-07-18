@@ -11,7 +11,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 
 @Accessors(chain = true)
 @ToString

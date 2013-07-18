@@ -10,9 +10,9 @@
 package logisticspipes.network;
 
 import net.minecraft.tileentity.TileEntity;
-import buildcraft.core.ByteBuffer;
-import buildcraft.core.network.ClassMapping;
-import buildcraft.core.network.ClassMapping.Indexes;
+import logistics_bc.core.ByteBuffer;
+import logistics_bc.core.network.ClassMapping;
+import logistics_bc.core.network.ClassMapping.Indexes;
 
 public class TilePacketWrapper {
 

@@ -20,7 +20,7 @@ public class FilteringRouter extends ServerRouter implements IFilteringRouter {
 	private ForgeDirection side;
 	
 	public FilteringRouter(UUID id, int dimension, int xCoord, int yCoord, int zCoord, ForgeDirection dir) {
-		super(id, dimension, xCoord, yCoord, zCoord);
+		super(id, dimension, container.xCoord, container.yCoord, container.zCoord);
 		this.side = dir;
 	}
 	

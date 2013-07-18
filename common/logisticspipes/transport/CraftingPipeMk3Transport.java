@@ -1,7 +1,7 @@
 package logisticspipes.transport;
 
 import logisticspipes.pipes.PipeItemsCraftingLogisticsMk3;
-import buildcraft.transport.EntityData;
+import logistics_bc.transport.EntityData;
 
 public class CraftingPipeMk3Transport extends PipeTransportLogistics {
 	

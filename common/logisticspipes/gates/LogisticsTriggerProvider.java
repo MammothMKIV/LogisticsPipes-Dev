@@ -22,8 +22,8 @@ import net.minecraft.tileentity.TileEntity;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.gates.ITriggerProvider;
 import buildcraft.api.transport.IPipe;
-import buildcraft.transport.Gate;
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.Gate;
+import logistics_bc.transport.Pipe;
 
 public class LogisticsTriggerProvider implements ITriggerProvider{
 

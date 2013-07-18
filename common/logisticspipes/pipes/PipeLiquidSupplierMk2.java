@@ -1,11 +1,13 @@
 package logisticspipes.pipes;
 
+import net.minecraftforge.fluids.FluidStack;
 import logisticspipes.interfaces.routing.IRequestLiquid;
 import logisticspipes.interfaces.routing.IRequireReliableLiquidTransport;
 import logisticspipes.logic.LogicLiquidSupplierMk2;
 import logisticspipes.pipes.basic.liquid.LiquidRoutedPipe;
 import logisticspipes.textures.Textures;
 import logisticspipes.textures.Textures.TextureType;
+import logisticspipes.transport.PipeLiquidTransportLogistics;
 import logisticspipes.utils.LiquidIdentifier;
 
 public class PipeLiquidSupplierMk2 extends LiquidRoutedPipe implements IRequestLiquid {
@@ -56,5 +58,10 @@ public class PipeLiquidSupplierMk2 extends LiquidRoutedPipe implements IRequestL
 	@Override
 	public boolean hasGenericInterests() {
 		return true;
+	}
+
+	@Override
+	public float canSink(FluidStack liquid) {
+		return ((PipeLiquidTransportLogistics)this.transport).internalTank.fill(liquid, false);
 	}
 }

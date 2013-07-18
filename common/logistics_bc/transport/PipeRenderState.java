@@ -1,0 +1,92 @@
+package logistics_bc.transport;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import logistics_bc.core.DefaultProps;
+import logistics_bc.core.network.IClientState;
+import logistics_bc.transport.utils.ConnectionMatrix;
+import logistics_bc.transport.utils.FacadeMatrix;
+import logistics_bc.transport.utils.TextureMatrix;
+import logistics_bc.transport.utils.WireMatrix;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.util.Icon;
+
+
+public class PipeRenderState implements IClientState {
+
+	private boolean hasGate = false;
+	private int gateIconIndex = 0;
+
+	public final ConnectionMatrix pipeConnectionMatrix = new ConnectionMatrix();
+	public final TextureMatrix textureMatrix = new TextureMatrix();
+	public final WireMatrix wireMatrix = new WireMatrix();
+
+	public final FacadeMatrix facadeMatrix = new FacadeMatrix();
+
+	private boolean dirty = true;
+
+	/*
+	 * This is a placeholder for the pipe renderer to set to a value that the BlockGenericPipe->TileGenericPipe will then return the the WorldRenderer
+	 */
+	@SideOnly(Side.CLIENT)
+	public Icon currentTexture;
+
+	public void setHasGate(boolean value) {
+		if (hasGate != value) {
+			hasGate = value;
+			dirty = true;
+		}
+	}
+
+	public boolean hasGate() {
+		return hasGate;
+	}
+
+	public void setGateIconIndex(int value) {
+		if (gateIconIndex != value) {
+			gateIconIndex = value;
+			dirty = true;
+		}
+	}
+
+	public int getGateIconIndex() {
+		return gateIconIndex;
+	}
+
+	public void clean() {
+		dirty = false;
+		pipeConnectionMatrix.clean();
+		textureMatrix.clean();
+		wireMatrix.clean();
+		facadeMatrix.clean();
+	}
+
+	public boolean isDirty() {
+		return dirty || pipeConnectionMatrix.isDirty() || textureMatrix.isDirty() || wireMatrix.isDirty() || facadeMatrix.isDirty();
+	}
+
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		data.writeBoolean(hasGate);
+		data.writeInt(gateIconIndex);
+		pipeConnectionMatrix.writeData(data);
+		textureMatrix.writeData(data);
+		wireMatrix.writeData(data);
+		facadeMatrix.writeData(data);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		hasGate = data.readBoolean();
+		gateIconIndex = data.readInt();
+		pipeConnectionMatrix.readData(data);
+		textureMatrix.readData(data);
+		wireMatrix.readData(data);
+		facadeMatrix.readData(data);
+	}
+}

@@ -11,7 +11,7 @@ package logisticspipes.logic;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import buildcraft.api.transport.IPipeEntry;
 import logisticspipes.LogisticsPipes;
 import logisticspipes.api.IRoutedPowerProvider;
 import logisticspipes.interfaces.IInventoryUtil;
@@ -34,9 +34,7 @@ import logisticspipes.utils.WorldUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
-import buildcraft.energy.EngineWood;
-import buildcraft.energy.TileEngine;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.lp_TileGenericPipe;
 import cpw.mods.fml.common.network.Player;
 
 public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableTransport{
@@ -63,9 +61,9 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 		//pause = true; //Pause until GUI is closed //TODO Find a way to handle this
 		if(MainProxy.isServer(entityplayer.worldObj)) {
 			//GuiProxy.openGuiSupplierPipe(entityplayer.inventory, dummyInventory, this);
-			entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_SupplierPipe_ID, worldObj, xCoord, yCoord, zCoord);
+			entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_SupplierPipe_ID, worldObj, container.xCoord, container.yCoord, container.zCoord);
 //TODO 		MainProxy.sendPacketToPlayer(new PacketPipeInteger(NetworkConstants.SUPPLIER_PIPE_MODE_RESPONSE, xCoord, yCoord, zCoord, isRequestingPartials() ? 1 : 0).getPacket(), (Player)entityplayer);
-			MainProxy.sendPacketToPlayer(PacketHandler.getPacket(SupplierPipeMode.class).setInteger(isRequestingPartials() ? 1 : 0).setPosX(xCoord).setPosY(yCoord).setPosZ(zCoord), (Player)entityplayer);
+			MainProxy.sendPacketToPlayer(PacketHandler.getPacket(SupplierPipeMode.class).setInteger(isRequestingPartials() ? 1 : 0).setPosX(container.xCoord).setPosY(container.yCoord).setPosZ(container.zCoord), (Player)entityplayer);
 		}
 	}
 	
@@ -81,23 +79,20 @@ public class LogicSupplier extends BaseRoutingLogic implements IRequireReliableT
 			return;
 		}
 		
-		if(MainProxy.isClient(this.worldObj)) return;
+		if(MainProxy.isClient(container.worldObj)) return;
 		if (pause) return;
 		super.throttledUpdateEntity();
 
 		for(int amount : _requestedItems.values()) {
 			if(amount > 0) {
-				MainProxy.sendSpawnParticlePacket(Particles.VioletParticle, xCoord, yCoord, zCoord, this.worldObj, 2);
+				MainProxy.sendSpawnParticlePacket(Particles.VioletParticle, container.xCoord, container.yCoord, container.zCoord, container.worldObj, 2);
 			}
 		}
 
-		WorldUtil worldUtil = new WorldUtil(worldObj, xCoord, yCoord, zCoord);
+		WorldUtil worldUtil = new WorldUtil(container.worldObj, container.xCoord, container.yCoord, container.zCoord);
 		for (AdjacentTile tile :  worldUtil.getAdjacentTileEntities(true)){
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			if (!(tile.tile instanceof IInventory)) continue;
-			
-			//Do not attempt to supply redstone engines
-			if (tile.tile instanceof TileEngine && ((TileEngine)tile.tile).engine instanceof EngineWood) continue;
 			
 			IInventory inv = (IInventory) tile.tile;
 			if (inv.getSizeInventory() < 1) continue;

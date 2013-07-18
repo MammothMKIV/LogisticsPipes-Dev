@@ -8,7 +8,7 @@ import logisticspipes.utils.gui.GuiStringHandlerButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.IInventory;
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.Pipe;
 
 public class GuiApiaristAnalyser extends GuiWithPreviousGuiContainer {
 

@@ -140,11 +140,11 @@ public class SimpleInventory implements IInventory, ISaveState{
 	}
 
 	public void dropContents(World worldObj, int posX, int posY, int posZ) {
-		if(MainProxy.isServer(worldObj)) {
+		if(MainProxy.isServer(container.worldObj)) {
 			for(int i=0;i<_contents.length;i++) {
 				while(_contents[i] != null) {
 					ItemStack todrop = decrStackSize(i, _contents[i].getMaxStackSize());
-			    	dropItems(worldObj, todrop, posX, posY, posZ);
+			    	dropItems(container.worldObj, todrop, posX, posY, posZ);
 				}
 			}
 			updateContents();

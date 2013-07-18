@@ -16,9 +16,9 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Keyboard;
 
-import buildcraft.core.utils.Localization;
-import buildcraft.transport.ItemPipe;
-import buildcraft.transport.Pipe;
+import logistics_bc.core.utils.Localization;
+import logistics_bc.transport.ItemPipe;
+import logistics_bc.transport.Pipe;
 
 /**
  * A logistics pipe Item

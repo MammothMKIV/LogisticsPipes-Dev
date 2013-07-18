@@ -28,16 +28,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.inventory.ISpecialInventory;
-import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
 import cpw.mods.fml.common.network.Player;
 
 public class LogisticsSolderingTileEntity extends TileEntity implements IPowerReceptor, ISpecialInventory, IGuiOpenControler, IRotationProvider {
 	
-	private IPowerProvider provider;
+	private PowerHandler provider;
 	private SimpleInventory inv = new SimpleInventory(12, "Soldering Inventory", 64);
 	public int heat = 0;
 	public int progress = 0;
@@ -48,8 +49,8 @@ public class LogisticsSolderingTileEntity extends TileEntity implements IPowerRe
 	private List<EntityPlayer> listener = new PlayerCollectionList();
 
 	public LogisticsSolderingTileEntity() {
-		provider = PowerFramework.currentFramework.createPowerProvider();
-		provider.configure(10, 10, 100, 10, 100);
+		
+		provider.configure(10, 10, 100, 1000);
 	}
 
 	public Container createContainer(EntityPlayer player) {
@@ -328,7 +329,7 @@ public class LogisticsSolderingTileEntity extends TileEntity implements IPowerRe
 		return true;
 	}
 
-	@Override
+	/*@Override
 	public void setPowerProvider(IPowerProvider provider) {
 		this.provider = provider;
 	}
@@ -336,13 +337,9 @@ public class LogisticsSolderingTileEntity extends TileEntity implements IPowerRe
 	@Override
 	public IPowerProvider getPowerProvider() {
 		return provider;
-	}
+	}*/
 
-	@Override
-	public void doWork() {
-		
-	}
-
+/*
 	@Override
 	public int powerRequest(ForgeDirection from) {
 		if (hasWork()) {
@@ -350,7 +347,7 @@ public class LogisticsSolderingTileEntity extends TileEntity implements IPowerRe
 		} else {
 			return 0;
 		}
-	}
+	}*/
 
 	@Override
 	public int getSizeInventory() {
@@ -534,14 +531,30 @@ public class LogisticsSolderingTileEntity extends TileEntity implements IPowerRe
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+	public void func_85027_a(CrashReportCategory par1CrashReportCategory) {
+		super.func_85027_a(par1CrashReportCategory);
+		par1CrashReportCategory.addCrashSection("LP-Version", LogisticsPipes.VERSION);
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public void func_85027_a(CrashReportCategory par1CrashReportCategory) {
-		super.func_85027_a(par1CrashReportCategory);
-		par1CrashReportCategory.addCrashSection("LP-Version", LogisticsPipes.VERSION);
+	public PowerReceiver getPowerReceiver(ForgeDirection side) {
+		return this.provider.getPowerReceiver();
+	}
+
+	@Override
+	public void doWork(PowerHandler workProvider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public World getWorld() {
+		return worldObj;
 	}
 }

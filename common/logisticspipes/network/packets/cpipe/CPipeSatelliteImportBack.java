@@ -5,7 +5,7 @@ import logisticspipes.network.abstractpackets.InventoryCoordinatesPacket;
 import logisticspipes.network.abstractpackets.ModernPacket;
 import lombok.experimental.Accessors;
 import net.minecraft.entity.player.EntityPlayer;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 
 @Accessors(chain = true)
 public class CPipeSatelliteImportBack extends InventoryCoordinatesPacket {

@@ -86,18 +86,18 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.BuildCraftTransport;
+import logistics_bc.BuildCraftTransport;
 import buildcraft.api.core.IIconProvider;
 import buildcraft.api.core.Position;
 import buildcraft.api.gates.ActionManager;
 import buildcraft.api.gates.IAction;
 import buildcraft.api.transport.IPipedItem;
-import buildcraft.core.EntityPassiveItem;
-import buildcraft.core.utils.Utils;
-import buildcraft.transport.EntityData;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.core.EntityPassiveItem;
+import logistics_bc.core.utils.Utils;
+import logistics_bc.transport.EntityData;
+import logistics_bc.transport.Pipe;
+import logistics_bc.transport.PipeTransportItems;
+import logistics_bc.transport.TileGenericPipe;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -245,13 +245,13 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 	public abstract ItemSendMode getItemSendMode();
 	
 	private boolean checkTileEntity(boolean force) {
-		if(worldObj.getWorldTime() % 10 == 0 || force) {
+		if(container.worldObj.getWorldTime() % 10 == 0 || force) {
 			if(!(this.container instanceof LogisticsTileGenericPipe)) {
 				TileEntity tile = worldObj.getBlockTileEntity(getX(), getY(), getZ());
 				if(tile != this.container) {
 					LogisticsPipes.log.severe("LocalCodeError");
 				}
-				if(MainProxy.isClient(worldObj)) {
+				if(MainProxy.isClient(container.worldObj)) {
 					WorldTickHandler.clientPipesToReplace.add(this.container);
 				} else {
 					WorldTickHandler.serverPipesToReplace.add(this.container);
@@ -324,7 +324,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 				worldObj.notifyBlockChange(getX(), getY(), getZ(), worldObj.getBlockId(getX(), getY(), getZ()));
 				for(Pair3<IRoutedItem, ForgeDirection, ItemSendMode> item : _sendQueue) {
 					//assign world to any entityitem we created in readfromnbt
-					item.getValue1().getEntityPassiveItem().setWorld(worldObj);
+					item.getValue1().getEntityPassiveItem().setWorld(container.worldObj);
 				}
 				//first tick just create a router and do nothing.
 				firstInitialiseTick();
@@ -347,7 +347,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 			}
 		}
 		//update router before ticking logic/transport
-		getRouter().update(worldObj.getWorldTime() % Configs.LOGISTICS_DETECTION_FREQUENCY == _delayOffset || _initialInit);
+		getRouter().update(container.worldObj.getWorldTime() % Configs.LOGISTICS_DETECTION_FREQUENCY == _delayOffset || _initialInit);
 		getUpgradeManager().securityTick();
 		super.updateEntity();
 		ignoreDisableUpdateEntity();
@@ -382,7 +382,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 				throw new UnsupportedOperationException("getItemSendMode() returned unhandled value. " + getItemSendMode().name() + " in "+this.getClass().getName());
 			}
 		}
-		if(MainProxy.isClient(worldObj)) return;
+		if(MainProxy.isClient(container.worldObj)) return;
 		checkTexturePowered();
 		if (!isEnabled()) return;
 		enabledUpdateEntity();
@@ -406,7 +406,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 				if (transport != null && transport instanceof PipeTransportLogistics){
 					((PipeTransportLogistics)transport).dropBuffer();
 				}
-				getUpgradeManager().dropUpgrades(worldObj, getX(), getY(), getZ());
+				getUpgradeManager().dropUpgrades(container.worldObj, getX(), getY(), getZ());
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -451,7 +451,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 	
 	@Override
 	public void dropContents() {
-		if(MainProxy.isClient(worldObj)) return;
+		if(MainProxy.isClient(container.worldObj)) return;
 		if(canBeDestroyed()) {
 			super.dropContents();
 		} else {
@@ -508,7 +508,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 
 	public void checkTexturePowered() {
 		if(Configs.LOGISTICS_POWER_USAGE_DISABLED) return;
-		if(worldObj.getWorldTime() % 10 != 0) return;
+		if(container.worldObj.getWorldTime() % 10 != 0) return;
 		if(stillNeedReplace || _initialInit || router == null) return;
 		boolean flag;
 		if((flag = canUseEnergy(1)) != _textureBufferPowered) {
@@ -621,7 +621,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 				UUID routerIntId = null;
 				if(routerId!=null && !routerId.isEmpty())
 					routerIntId = UUID.fromString(routerId);
-				router = SimpleServiceLocator.routerManager.getOrCreateRouter(routerIntId, MainProxy.getDimensionForWorld(worldObj), getX(), getY(), getZ(), false);
+				router = SimpleServiceLocator.routerManager.getOrCreateRouter(routerIntId, MainProxy.getDimensionForWorld(container.worldObj), getX(), getY(), getZ(), false);
 			}
 		}
 		return router;
@@ -643,7 +643,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 	public void onNeighborBlockChange(int blockId) {
 		super.onNeighborBlockChange(blockId);
 		clearCache();
-		if(!stillNeedReplace && MainProxy.isServer(worldObj)) {
+		if(!stillNeedReplace && MainProxy.isServer(container.worldObj)) {
 			onNeighborBlockChange_Logistics();
 		}
 	}
@@ -851,7 +851,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 	/* Power System */
 
 	public List<ILogisticsPowerProvider> getRoutedPowerProviders() {
-		if(MainProxy.isClient(worldObj)) {
+		if(MainProxy.isClient(container.worldObj)) {
 			return null;
 		}
 		if(stillNeedReplace) {
@@ -922,7 +922,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 
 	@Override
 	public boolean canUseEnergy(int amount, List<Object> providersToIgnore) {
-		if(MainProxy.isClient(worldObj)) return false;
+		if(MainProxy.isClient(container.worldObj)) return false;
 		if(Configs.LOGISTICS_POWER_USAGE_DISABLED) return true;
 		if(amount == 0) return true;
 		if(providersToIgnore !=null && providersToIgnore.contains(this))
@@ -939,7 +939,7 @@ public abstract class CoreRoutedPipe extends Pipe implements IRequestItems, IAdj
 	
 	@Override
 	public boolean useEnergy(int amount, List<Object> providersToIgnore) {
-		if(MainProxy.isClient(worldObj)) return false;
+		if(MainProxy.isClient(container.worldObj)) return false;
 		if(Configs.LOGISTICS_POWER_USAGE_DISABLED) return true;
 		if(amount == 0) return true;
 		if(providersToIgnore==null)

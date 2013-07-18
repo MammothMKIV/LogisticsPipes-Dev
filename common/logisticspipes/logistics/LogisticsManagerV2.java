@@ -163,7 +163,7 @@ public class LogisticsManagerV2 implements ILogisticsManagerV2 {
 		if(filters.isEmpty() && result.getValue1() != null) {
 			CoreRoutedPipe pipe = SimpleServiceLocator.routerManager.getRouterUnsafe(result.getValue1(),false).getPipe();
 			pipe.useEnergy(result.getValue2().energyUse);
-			MainProxy.sendSpawnParticlePacket(Particles.BlueParticle, pipe.xCoord, pipe.yCoord, pipe.zCoord, pipe.worldObj, 10);
+			MainProxy.sendSpawnParticlePacket(Particles.BlueParticle, pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord, pipe.container.worldObj, 10);
 		}
 		return result;
 	}
@@ -218,7 +218,7 @@ public class LogisticsManagerV2 implements ILogisticsManagerV2 {
 		}
 		Collections.sort(validDestinations);
 		if(item.getItemStack() != null && item.getItemStack().getItem() instanceof LogisticsLiquidContainer) {
-			Pair<Integer, Integer> bestReply = SimpleServiceLocator.logisticsLiquidManager.getBestReply(SimpleServiceLocator.logisticsLiquidManager.getLiquidFromContainer(item.getItemStack()), sourceRouter, item.getJamList());
+			Pair<Integer, Integer> bestReply = SimpleServiceLocator.logisticsLiquidManager.getBestReply(SimpleServiceLocator.logisticsLiquidManager.getFluidFromContainer(item.getItemStack()), sourceRouter, item.getJamList());
 			if (bestReply.getValue1() != null && bestReply.getValue1() != 0){
 				item.setBufferCounter(0);
 				item.setDestination(bestReply.getValue1());

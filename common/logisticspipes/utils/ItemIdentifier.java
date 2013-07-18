@@ -524,7 +524,7 @@ public final class ItemIdentifier implements Comparable<ItemIdentifier> {
 		return uniqueID;
 	}
 
-	public LiquidIdentifier getLiquidIdentifier() {
+	public LiquidIdentifier getFluidIdentifier() {
 		return LiquidIdentifier.get(itemID, itemDamage);
 	}
 

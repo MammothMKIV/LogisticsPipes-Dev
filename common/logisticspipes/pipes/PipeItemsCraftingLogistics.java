@@ -66,7 +66,6 @@ import logisticspipes.utils.ItemIdentifierStack;
 import logisticspipes.utils.LiquidIdentifier;
 import logisticspipes.utils.Pair3;
 import logisticspipes.utils.PlayerCollectionList;
-import logisticspipes.utils.SidedInventoryForgeAdapter;
 import logisticspipes.utils.SidedInventoryMinecraftAdapter;
 import logisticspipes.utils.WorldUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,11 +73,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
+import buildcraft.api.transport.IPipeEntry;
 import buildcraft.api.inventory.ISpecialInventory;
-import buildcraft.core.EntityPassiveItem;
-import buildcraft.core.utils.Utils;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.core.EntityPassiveItem;
+import logistics_bc.core.utils.Utils;
+import logistics_bc.transport.PipeTransportItems;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.Player;
 
@@ -124,10 +123,10 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 	protected List<AdjacentTile> locateCrafters()	{
 		if(_cachedCrafters !=null)
 			return _cachedCrafters;
-		WorldUtil worldUtil = new WorldUtil(this.worldObj, this.getX(), this.getY(), this.getZ());
+		WorldUtil worldUtil = new WorldUtil(this.container.worldObj, this.getX(), this.getY(), this.getZ());
 		LinkedList<AdjacentTile> crafters = new LinkedList<AdjacentTile>();
 		for (AdjacentTile tile : worldUtil.getAdjacentTileEntities(true)){
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			if (!(tile.tile instanceof IInventory)) continue;
 			crafters.add(tile);
 		}
@@ -231,7 +230,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 	@Override
 	public void ignoreDisableUpdateEntity() {
 		if(!init) {
-			if(MainProxy.isClient(worldObj)) {
+			if(MainProxy.isClient(container.worldObj)) {
 				if(FMLClientHandler.instance().getClient() != null && FMLClientHandler.instance().getClient().thePlayer != null && FMLClientHandler.instance().getClient().thePlayer.sendQueue != null){
 //TODO 				MainProxy.sendPacketToServer(new PacketCoordinates(NetworkConstants.REQUEST_CRAFTING_PIPE_UPDATE, getX(), getY(), getZ()).getPacket());
 					MainProxy.sendPacketToServer(PacketHandler.getPacket(RequestCraftingPipeUpdatePacket.class).setPosX(getX()).setPosY(getY()).setPosZ(getZ()));
@@ -247,7 +246,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 			checkContentUpdate();
 		}
 		
-		if (worldObj.getWorldTime() % 6 != 0) return;
+		if (container.worldObj.getWorldTime() % 6 != 0) return;
 
 		waitingForCraft = false;
 		
@@ -268,7 +267,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 		List<ItemIdentifier> wanteditem = providedItem();
 		if(wanteditem == null) return;
 
-		MainProxy.sendSpawnParticlePacket(Particles.VioletParticle, getX(), getY(), getZ(), this.worldObj, 2);
+		MainProxy.sendSpawnParticlePacket(Particles.VioletParticle, getX(), getY(), getZ(), this.container.worldObj, 2);
 		
 		int itemsleft = itemsToExtract();
 		int stacksleft = stacksToExtract();
@@ -295,9 +294,6 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 				} else if (tile.tile instanceof net.minecraft.inventory.ISidedInventory) {
 					IInventory sidedadapter = new SidedInventoryMinecraftAdapter((net.minecraft.inventory.ISidedInventory) tile.tile, ForgeDirection.UNKNOWN,true);
 					extracted = extractFromIInventory(sidedadapter, nextOrder.getValue1().getItem(), maxtosend);
-				} else if (tile.tile instanceof net.minecraftforge.common.ISidedInventory) {
-					IInventory sidedadapter = new SidedInventoryForgeAdapter((net.minecraftforge.common.ISidedInventory) tile.tile, ForgeDirection.UNKNOWN);
-					extracted = extractFromIInventory(sidedadapter, nextOrder.getValue1().getItem(), maxtosend);
 				} else if (tile.tile instanceof IInventory) {
 					extracted = extractFromIInventory((IInventory)tile.tile, nextOrder.getValue1().getItem(), maxtosend);
 				}
@@ -318,7 +314,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 				itemsleft -= numtosend;
 				ItemStack stackToSend = extracted.splitStack(numtosend);
 				if (processingOrder) {
-					IRoutedItem item = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(stackToSend, worldObj);
+					IRoutedItem item = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(stackToSend, container.worldObj);
 					item.setDestination(nextOrder.getValue2().getRouter().getSimpleID());
 					item.setTransportMode(TransportMode.Active);
 					item.addRelayPoints(nextOrder.getValue3());
@@ -339,7 +335,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 					LogisticsPipes.requestLog.info(stackToSend.stackSize + " extras dropped, " + countExtras() + " remaining");
  					Position entityPos = new Position(p.x + 0.5, p.y + Utils.getPipeFloorOf(stackToSend), p.z + 0.5, p.orientation.getOpposite());
 					entityPos.moveForwards(0.5);
-					EntityPassiveItem entityItem = new EntityPassiveItem(worldObj, entityPos.x, entityPos.y, entityPos.z, stackToSend);
+					EntityPassiveItem entityItem = new EntityPassiveItem(container.worldObj, entityPos.x, entityPos.y, entityPos.z, stackToSend);
 					entityItem.setSpeed(Utils.pipeNormalSpeed * Configs.LOGISTICS_DEFAULTROUTED_SPEED_MULTIPLIER);
 					((PipeTransportItems) transport).entityEntering(entityItem, entityPos.orientation);
 				}
@@ -487,7 +483,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 			template.addRequirement(ItemIdentifierStack.GetFromStack(resourceStack), target[i]);
 		}
 		
-		int liquidCrafter = this.getUpgradeManager().getLiquidCrafter();
+		int liquidCrafter = this.getUpgradeManager().getFluidCrafter();
 		IRequestLiquid[] liquidTarget = new IRequestLiquid[liquidCrafter];
 		
 		if(!getUpgradeManager().isAdvancedSatelliteCrafter()) {
@@ -525,7 +521,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 			removeExtras(promise.numberOfItems, promise.item);
 		}
 		_orderManager.addOrder(new ItemIdentifierStack(promise.item, promise.numberOfItems), destination, promise.relayPoints);
-		MainProxy.sendSpawnParticlePacket(Particles.WhiteParticle, getX(), getY(), getZ(), this.worldObj, 2);
+		MainProxy.sendSpawnParticlePacket(Particles.WhiteParticle, getX(), getY(), getZ(), this.container.worldObj, 2);
 	}
 
 	@Override
@@ -601,7 +597,7 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 
 	private void checkContentUpdate() {
 		doContentUpdate = false;
-		LinkedList<ItemIdentifierStack> all = _orderManager.getContentList(this.worldObj);
+		LinkedList<ItemIdentifierStack> all = _orderManager.getContentList(this.container.worldObj);
 		if(!oldList.equals(all)) {
 			oldList.clear();
 			oldList.addAll(all);
@@ -671,8 +667,8 @@ public class PipeItemsCraftingLogistics extends CoreRoutedPipe implements ICraft
 					MainProxy.sendPacketToPlayer(packetA, (Player)player);
 					MainProxy.sendPacketToPlayer(packetB, (Player)player);
 				}
-				MainProxy.sendPacketToAllWatchingChunk(getX(), getZ(), MainProxy.getDimensionForWorld(worldObj), packetA);
-				MainProxy.sendPacketToAllWatchingChunk(getX(), getZ(), MainProxy.getDimensionForWorld(worldObj), packetB);
+				MainProxy.sendPacketToAllWatchingChunk(getX(), getZ(), MainProxy.getDimensionForWorld(container.worldObj), packetA);
+				MainProxy.sendPacketToAllWatchingChunk(getX(), getZ(), MainProxy.getDimensionForWorld(container.worldObj), packetB);
 				this.refreshRender(false);
 				return true;
 			}

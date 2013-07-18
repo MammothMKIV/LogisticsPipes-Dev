@@ -1,13 +1,14 @@
 package logisticspipes.pipes.basic.liquid;
 
-import logisticspipes.textures.Textures;
-import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.IIconProvider;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.PipeTransportLiquids;
-import buildcraft.transport.pipes.PipeLogicGold;
+import logistics_bc.transport.Pipe;
+import logistics_bc.transport.PipeTransportLiquids;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import logisticspipes.textures.Textures;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
 
 public class LogisticsLiquidConnectorPipe extends Pipe {
 
@@ -19,14 +20,32 @@ public class LogisticsLiquidConnectorPipe extends Pipe {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return Textures.LPpipeIconProvider;	
-	}
-
-
-	@Override
 	public int getIconIndex(ForgeDirection direction) {
 		return Textures.LOGISTICSPIPE_LIQUID_CONNECTOR;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIconProvider getIconProvider() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isWired(WireColor color) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean hasInterface() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isWireConnectedTo(TileEntity tile, WireColor color) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

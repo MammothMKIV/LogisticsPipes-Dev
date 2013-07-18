@@ -14,7 +14,7 @@ import logisticspipes.proxy.MainProxy;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.lp_TileGenericPipe;
 
 public class ClientRouter implements IRouter {
 	private final int _xCoord;
@@ -89,8 +89,8 @@ public class ClientRouter implements IRouter {
 		}
 		TileEntity tile = worldObj.getBlockTileEntity(_xCoord, _yCoord, _zCoord);
 		
-		if (!(tile instanceof TileGenericPipe)) return null;
-		TileGenericPipe pipe = (TileGenericPipe) tile;
+		if (!(tile instanceof lp_TileGenericPipe)) return null;
+		lp_TileGenericPipe pipe = (lp_TileGenericPipe) tile;
 		if (!(pipe.pipe instanceof CoreRoutedPipe)) return null;
 		return (CoreRoutedPipe) pipe.pipe;
 	}

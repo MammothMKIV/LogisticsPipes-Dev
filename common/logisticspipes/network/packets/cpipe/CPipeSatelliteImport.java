@@ -4,7 +4,7 @@ import logisticspipes.logic.BaseLogicCrafting;
 import logisticspipes.network.abstractpackets.CoordinatesPacket;
 import logisticspipes.network.abstractpackets.ModernPacket;
 import net.minecraft.entity.player.EntityPlayer;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 
 public class CPipeSatelliteImport extends CoordinatesPacket {
 	

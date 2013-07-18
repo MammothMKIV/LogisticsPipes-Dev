@@ -26,7 +26,7 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 

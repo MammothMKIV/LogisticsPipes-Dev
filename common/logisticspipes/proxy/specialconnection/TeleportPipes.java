@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeEntry;
+import buildcraft.api.transport.IPipeTile;
+
 import logisticspipes.LogisticsPipes;
 import logisticspipes.interfaces.routing.ISpecialPipedConnection;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.Pipe;
+import logistics_bc.transport.lp_TileGenericPipe;
 
 /** Support for teleport pipes **/
 public class TeleportPipes implements ISpecialPipedConnection {
@@ -46,8 +50,8 @@ public class TeleportPipes implements ISpecialPipedConnection {
 
 
 	@Override
-	public boolean isType(TileGenericPipe tile) {
-		if(PipeItemTeleport.isAssignableFrom(tile.pipe.getClass())) return true;
+	public boolean isType(IPipeConnection tile) {
+		if(PipeItemTeleport.isAssignableFrom(tile.getPipe().getClass())) return true;
 		return false;
 	}
 
@@ -60,12 +64,12 @@ public class TeleportPipes implements ISpecialPipedConnection {
 	}
 	
 	@Override
-	public List<TileGenericPipe> getConnections(TileGenericPipe tile) {
-		List<TileGenericPipe> list = new ArrayList<TileGenericPipe>();
+	public List<IPipeTile> getConnections(IPipeTile tile) {
+		List<IPipeTile> list = new ArrayList<IPipeTile>();
 		try {
-			LinkedList<? extends Pipe> pipes = getConnectedTeleportPipes(tile.pipe);
-			for(Pipe pipe : pipes) {
-				list.add(pipe.container);
+			LinkedList<? extends IPipeEntry> pipes = getConnectedTeleportPipes(tile.getPipe());
+			for(IPipeEntry pipe : pipes) {
+				list.add(pipe.getContainer());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

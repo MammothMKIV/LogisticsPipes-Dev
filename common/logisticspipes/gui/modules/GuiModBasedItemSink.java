@@ -10,7 +10,7 @@ import logisticspipes.utils.gui.SmallGuiButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.IInventory;
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.Pipe;
 
 public class GuiModBasedItemSink extends GuiWithPreviousGuiContainer {
 	

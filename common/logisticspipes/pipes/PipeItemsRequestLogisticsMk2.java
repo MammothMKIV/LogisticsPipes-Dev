@@ -48,7 +48,7 @@ public class PipeItemsRequestLogisticsMk2 extends PipeItemsRequestLogistics {
 			}
 		}
 		if(flag) {
-			entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Mk2_Orderer_ID, this.worldObj, this.getX() , this.getY(), this.getZ());
+			entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Mk2_Orderer_ID, container.worldObj, this.getX() , this.getY(), this.getZ());
 		}
 	}
 
@@ -88,15 +88,15 @@ public class PipeItemsRequestLogisticsMk2 extends PipeItemsRequestLogistics {
 	@Override
 	public void onBlockRemoval() {
 		super.onBlockRemoval();
-		if(MainProxy.isServer(this.worldObj)) {
+		if(MainProxy.isServer(container.worldObj)) {
 			this.dropDisk();
 		}
 	}
 	
 	public void dropDisk() {
 		if(disk != null) {
-			EntityItem item = new EntityItem(worldObj,this.getX(), this.getY(), this.getZ(), disk);
-			worldObj.spawnEntityInWorld(item);
+			EntityItem item = new EntityItem(container.worldObj,this.getX(), this.getY(), this.getZ(), disk);
+			container.worldObj.spawnEntityInWorld(item);
 			disk = null;
 		}
 	}

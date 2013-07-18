@@ -8,7 +8,7 @@ import logisticspipes.proxy.SimpleServiceLocator;
 import logisticspipes.routing.ExitRoute;
 import logisticspipes.routing.PipeRoutingConnectionType;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.transport.EntityData;
+import logistics_bc.transport.EntityData;
 
 public class EntrencsTransport extends PipeTransportLogistics {
 	

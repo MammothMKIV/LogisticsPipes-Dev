@@ -21,8 +21,10 @@ import net.minecraftforge.common.DimensionManager;
 
 import org.lwjgl.input.Keyboard;
 
-import buildcraft.transport.Pipe;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeEntry;
+
+import logistics_bc.transport.Pipe;
+import logistics_bc.transport.lp_TileGenericPipe;
 import cpw.mods.fml.common.network.Player;
 
 public class RemoteOrderer extends Item {
@@ -83,8 +85,8 @@ public class RemoteOrderer extends Item {
 		if(pipe != null) {
 			if(MainProxy.isServer(par3EntityPlayer.worldObj)) {
 //TODO 			MainProxy.sendPacketToPlayer(new PacketInteger(NetworkConstants.REQUEST_GUI_DIMENSION, MainProxy.getDimensionForWorld(pipe.worldObj)).getPacket(), (Player)par3EntityPlayer);
-				MainProxy.sendPacketToPlayer(PacketHandler.getPacket(RequestPipeDimension.class).setInteger(MainProxy.getDimensionForWorld(pipe.worldObj)), (Player)par3EntityPlayer);
-				par3EntityPlayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Orderer_ID, pipe.worldObj, pipe.xCoord, pipe.yCoord, pipe.zCoord);
+				MainProxy.sendPacketToPlayer(PacketHandler.getPacket(RequestPipeDimension.class).setInteger(MainProxy.getDimensionForWorld(pipe.container.worldObj)), (Player)par3EntityPlayer);
+				par3EntityPlayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Orderer_ID, pipe.container.worldObj, pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord);
 			}
 		}
 		return par1ItemStack;
@@ -92,12 +94,12 @@ public class RemoteOrderer extends Item {
 	
 	public static void connectToPipe(ItemStack stack, PipeItemsRemoteOrdererLogistics pipe) {
 		stack.stackTagCompound = new NBTTagCompound();
-		stack.stackTagCompound.setInteger("connectedPipe-x", pipe.xCoord);
-		stack.stackTagCompound.setInteger("connectedPipe-y", pipe.yCoord);
-		stack.stackTagCompound.setInteger("connectedPipe-z", pipe.zCoord);
+		stack.stackTagCompound.setInteger("connectedPipe-x", pipe.container.xCoord);
+		stack.stackTagCompound.setInteger("connectedPipe-y", pipe.container.yCoord);
+		stack.stackTagCompound.setInteger("connectedPipe-z", pipe.container.zCoord);
 		int dimension = 0;
 		for(Integer dim:DimensionManager.getIDs()) {
-			if(pipe.worldObj.equals(DimensionManager.getWorld(dim.intValue()))) {
+			if(pipe.container.worldObj.equals(DimensionManager.getWorld(dim.intValue()))) {
 				dimension = dim.intValue();
 				break;
 			}
@@ -124,10 +126,10 @@ public class RemoteOrderer extends Item {
 			return null;
 		}
 		TileEntity tile = world.getBlockTileEntity(stack.stackTagCompound.getInteger("connectedPipe-x"), stack.stackTagCompound.getInteger("connectedPipe-y"), stack.stackTagCompound.getInteger("connectedPipe-z"));
-		if(!(tile instanceof TileGenericPipe)) {
+		if(!(tile instanceof lp_TileGenericPipe)) {
 			return null;
 		}
-		Pipe pipe = ((TileGenericPipe)tile).pipe;
+		Pipe pipe = ((lp_TileGenericPipe)tile).pipe;
 		if(pipe instanceof PipeItemsRemoteOrdererLogistics) {
 			return (PipeItemsRemoteOrdererLogistics)pipe;
 		}

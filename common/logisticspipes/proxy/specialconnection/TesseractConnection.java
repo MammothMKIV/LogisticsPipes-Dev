@@ -9,8 +9,8 @@ import logisticspipes.proxy.SimpleServiceLocator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
-import buildcraft.transport.EntityData;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.EntityData;
+import logistics_bc.transport.TileGenericPipe;
 
 public class TesseractConnection implements ISpecialTileConnection {
 	

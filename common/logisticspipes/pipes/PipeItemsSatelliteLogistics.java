@@ -33,14 +33,13 @@ import logisticspipes.textures.Textures.TextureType;
 import logisticspipes.utils.InventoryHelper;
 import logisticspipes.utils.ItemIdentifierStack;
 import logisticspipes.utils.PlayerCollectionList;
-import logisticspipes.utils.SidedInventoryForgeAdapter;
 import logisticspipes.utils.SidedInventoryMinecraftAdapter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeEntry;
 import cpw.mods.fml.common.network.Player;
 
 public class PipeItemsSatelliteLogistics extends CoreRoutedPipe implements IRequestItems, IHeadUpDisplayRendererProvider, IChestContentReceiver {
@@ -61,7 +60,7 @@ public class PipeItemsSatelliteLogistics extends CoreRoutedPipe implements IRequ
 
 	@Override
 	public void enabledUpdateEntity() {
-		if(worldObj.getWorldTime() % 20 == 0 && localModeWatchers.size() > 0) {
+		if(container.worldObj.getWorldTime() % 20 == 0 && localModeWatchers.size() > 0) {
 			updateInv(false);
 		}
 	}
@@ -91,8 +90,8 @@ public class PipeItemsSatelliteLogistics extends CoreRoutedPipe implements IRequ
 	private IInventory getRawInventory(ForgeDirection ori) {
 		Position pos = new Position(this.getX(), this.getY(), this.getZ(), ori);
 		pos.moveForwards(1);
-		TileEntity tile = this.worldObj.getBlockTileEntity((int)pos.x, (int)pos.y, (int)pos.z);
-		if (tile instanceof TileGenericPipe) return null;
+		TileEntity tile = container.worldObj.getBlockTileEntity((int)pos.x, (int)pos.y, (int)pos.z);
+		if (tile instanceof IPipeEntry) return null;
 		if (!(tile instanceof IInventory)) return null;
 		return InventoryHelper.getInventory((IInventory) tile);
 	}
@@ -100,7 +99,7 @@ public class PipeItemsSatelliteLogistics extends CoreRoutedPipe implements IRequ
 	private IInventory getInventory(ForgeDirection ori) {
 		IInventory rawInventory = getRawInventory(ori);
 		if (rawInventory instanceof net.minecraft.inventory.ISidedInventory) return new SidedInventoryMinecraftAdapter((net.minecraft.inventory.ISidedInventory) rawInventory, ori.getOpposite(), false);
-		if (rawInventory instanceof net.minecraftforge.common.ISidedInventory) return new SidedInventoryForgeAdapter((net.minecraftforge.common.ISidedInventory) rawInventory, ori.getOpposite());
+//		if (rawInventory instanceof net.minecraftforge.common.ISidedInventory) return new SidedInventoryForgeAdapter((net.minecraftforge.common.ISidedInventory) rawInventory, ori.getOpposite());
 		return rawInventory;
 	}
 	
@@ -138,9 +137,14 @@ public class PipeItemsSatelliteLogistics extends CoreRoutedPipe implements IRequ
 	public void playerStartWatching(EntityPlayer player, int mode) {
 		if(mode == 1) {
 			localModeWatchers.add(player);
+<<<<<<< HEAD
 			final ModernPacket packet = PacketHandler.getPacket(SatPipeSetID.class).setSatID(((BaseLogicSatellite)this.logic).satelliteId).setPosX(xCoord).setPosY(yCoord).setPosZ(zCoord);
 //TODO Must be handled manualy
 			MainProxy.sendPacketToPlayer(packet, (Player)player);
+=======
+			final ModernPacket packet = PacketHandler.getPacket(SatPipeSetID.class).setSatID(((BaseLogicSatellite)this.logic).satelliteId).setPosX(container.xCoord).setPosY(container.yCoord).setPosZ(container.zCoord);
+			MainProxy.sendPacketToPlayer(packet.getPacket(), (Player)player);
+>>>>>>> api update for 16, and partial BC split
 			updateInv(true);
 		} else {
 			super.playerStartWatching(player, mode);

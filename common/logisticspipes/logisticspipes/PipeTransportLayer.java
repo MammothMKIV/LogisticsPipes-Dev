@@ -2,12 +2,13 @@ package logisticspipes.logisticspipes;
 
 import java.util.LinkedList;
 
+import buildcraft.api.transport.IPipeEntry;
+
 import logisticspipes.pipes.basic.CoreRoutedPipe;
 import logisticspipes.routing.IRouter;
 import logisticspipes.routing.RoutedEntityItem;
 import logisticspipes.utils.AdjacentTile;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.transport.TileGenericPipe;
 
 /**
  * This class is responsible for handling incoming items for standard pipes
@@ -42,7 +43,7 @@ public class PipeTransportLayer extends TransportLayer{
 		// 1st prio, deliver to adjacent IInventories
 		
 		for (AdjacentTile tile : adjacentEntities){
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			if(denyed != null && denyed.equals(tile.orientation)) continue;
 			
 			CoreRoutedPipe pipe = _router.getPipe();

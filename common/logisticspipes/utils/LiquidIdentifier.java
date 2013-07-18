@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import logisticspipes.LogisticsPipes;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.google.common.base.Objects;
 
@@ -82,20 +82,20 @@ public class LiquidIdentifier {
 		return ItemIdentifier.get(itemId, itemMeta, null);
 	}
 	
-	public static LiquidIdentifier get(LiquidStack stack) {
+	public static LiquidIdentifier get(FluidStack stack) {
 		if(stack.extra != null) {
-			LogisticsPipes.log.warning("Found liquidStack with NBT tag. LP doesn't know how to handle it.");
+			LogisticsPipes.log.warning("Found FluidStack with NBT tag. LP doesn't know how to handle it.");
 			new Exception().printStackTrace();
 		}
-		return get(stack.itemID, stack.itemMeta);
+		return get(stack.fluidID, stack.itemMeta);
 	}
 	
-	public static LiquidIdentifier get(LiquidStack stack, String name) {
+	public static LiquidIdentifier get(FluidStack stack, String name) {
 		if(stack.extra != null) {
-			LogisticsPipes.log.warning("Found liquidStack with NBT tag. LP doesn't know how to handle it.");
+			LogisticsPipes.log.warning("Found FluidStack with NBT tag. LP doesn't know how to handle it.");
 			new Exception().printStackTrace();
 		}
-		return get(stack.itemID, stack.itemMeta, name);
+		return get(stack.fluidID, stack.itemMeta, name);
 	}
 	
 	public static LiquidIdentifier get(int itemID, int itemMeta) {
@@ -109,19 +109,19 @@ public class LiquidIdentifier {
 		return new LiquidIdentifier(itemID, itemMeta, name);
 	}
 	
-	public LiquidStack makeLiquidStack(int amount) {
-		return new LiquidStack(itemId, amount, itemMeta);
+	public FluidStack makeFluidStack(int amount) {
+		return new FluidStack(itemId, amount, itemMeta);
 	}
 	
-	public int getFreeSpaceInsideTank(ITankContainer container, ForgeDirection dir) {
+	public int getFreeSpaceInsideTank(IFluidHandler container, ForgeDirection dir) {
 		int free = 0;
-		ILiquidTank[] tanks = container.getTanks(dir);
+		IFluidTank[] tanks = container.getTanks(dir);
 		if(tanks != null && tanks.length > 0) {
 			for(int i=0;i<tanks.length;i++) {
 				free += getFreeSpaceInsideTank(tanks[i]);
 			}
 		} else {
-			ILiquidTank tank = container.getTank(dir, this.makeLiquidStack(0));
+			IFluidTank tank = container.getTank(dir, this.makeFluidStack(0));
 			if(tank != null) {
 				free += getFreeSpaceInsideTank(tank);
 			}
@@ -129,9 +129,9 @@ public class LiquidIdentifier {
 		return free;
 	}
 	
-	public int getFreeSpaceInsideTank(ILiquidTank tank) {
-		LiquidStack liquid = tank.getLiquid();
-		if(liquid == null || liquid.itemID <= 0) {
+	public int getFreeSpaceInsideTank(IFluidTank tank) {
+		FluidStack liquid = tank.getFluid();
+		if(liquid == null || liquid.fluidID <= 0) {
 			return tank.getCapacity();
 		}
 		if(get(liquid) == this) {
@@ -143,8 +143,8 @@ public class LiquidIdentifier {
 	private static boolean init = false;
 	public static void initFromForge(boolean flag) {
 		if(init) return;
-		Map<String, LiquidStack> liquids = LiquidDictionary.getLiquids();
-		for(Entry<String, LiquidStack> name: liquids.entrySet()) {
+		Map<String, FluidStack> liquids = FluidRegistry.getRegisteredFluids().getFluids();
+		for(Entry<String, FluidStack> name: liquids.entrySet()) {
 			get(name.getValue(), name.getKey());
 		}
 		if(flag) {

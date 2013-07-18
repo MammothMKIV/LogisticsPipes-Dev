@@ -84,12 +84,12 @@ public class LiquidRequestTreeNode {
 	private boolean checkLiquidProvider() {
 		boolean done = true;
 		LiquidRoutedPipe thisPipe = (LiquidRoutedPipe) this.target;
-		List<ILiquidProvider> providers = getLiquidProviders();
+		List<ILiquidProvider> providers = getFluidProviders();
 		for(ILiquidProvider provider:providers) {
 			if(!thisPipe.sharesTankWith((LiquidRoutedPipe) provider)) {
 				int alreadyRequested = 0;
 				if(root != null) {
-					alreadyRequested = root.getAllPromissesFor(provider, getLiquid());
+					alreadyRequested = root.getAllPromissesFor(provider, getFluid());
 				}
 				provider.canProvide(this, alreadyRequested);
 			}
@@ -100,7 +100,7 @@ public class LiquidRequestTreeNode {
 		return done;
 	}
 
-	private List<ILiquidProvider> getLiquidProviders() {
+	private List<ILiquidProvider> getFluidProviders() {
 		BitSet routersIndex = ServerRouter.getRoutersInterestedIn(liquid.getItemIdentifier());
 		List<ILiquidProvider> providers = new LinkedList<ILiquidProvider>();
 		for (int i = routersIndex.nextSetBit(0); i >= 0; i = routersIndex.nextSetBit(i+1)) {
@@ -122,7 +122,7 @@ public class LiquidRequestTreeNode {
 		return amount;
 	}
 
-	public LiquidIdentifier getLiquid() {
+	public LiquidIdentifier getFluid() {
 		return liquid;
 	}
 

@@ -70,23 +70,24 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.BuildCraftTransport;
+import logistics_bc.BuildCraftTransport;
 import buildcraft.api.gates.ActionManager;
 import buildcraft.api.gates.IAction;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.tools.IToolWrench;
 import buildcraft.api.transport.IPipedItem;
-import buildcraft.core.EntityPassiveItem;
-import buildcraft.core.utils.Localization;
-import buildcraft.core.utils.Utils;
-import buildcraft.transport.BlockGenericPipe;
-import buildcraft.transport.EntityData;
-import buildcraft.transport.ItemPipe;
-import buildcraft.transport.Pipe;
 import buildcraft.transport.TileGenericPipe;
-import buildcraft.transport.TransportProxy;
-import buildcraft.transport.TransportProxyClient;
-import buildcraft.transport.render.RenderPipe;
+import logistics_bc.core.EntityPassiveItem;
+import logistics_bc.core.utils.Localization;
+import logistics_bc.core.utils.Utils;
+import logistics_bc.transport.BlockGenericPipe;
+import logistics_bc.transport.EntityData;
+import logistics_bc.transport.ItemPipe;
+import logistics_bc.transport.Pipe;
+import logistics_bc.transport.lp_TileGenericPipe;
+import logistics_bc.transport.TransportProxy;
+import logistics_bc.transport.TransportProxyClient;
+import logistics_bc.transport.render.RenderPipe;
 import cpw.mods.fml.relauncher.Side;
 
 public class BuildCraftProxy {
@@ -106,15 +107,15 @@ public class BuildCraftProxy {
 	}
 	
 	public boolean checkPipesConnections(TileEntity from, TileEntity to, ForgeDirection way, boolean ignoreSystemDisconnection) {
-		if(from instanceof TileGenericPipe && to instanceof TileGenericPipe && (((TileGenericPipe)from).pipe instanceof CoreRoutedPipe || ((TileGenericPipe)to).pipe instanceof CoreRoutedPipe)) {
-			if(((TileGenericPipe)from).pipe instanceof CoreRoutedPipe) {
-				if (!((CoreRoutedPipe)((TileGenericPipe)from).pipe).canPipeConnect(to, way, ignoreSystemDisconnection)) {
+		if(from instanceof lp_TileGenericPipe || to instanceof lp_TileGenericPipe ){
+			if(((lp_TileGenericPipe)from).pipe instanceof CoreRoutedPipe) {
+				if (!((CoreRoutedPipe)((lp_TileGenericPipe)from).pipe).canPipeConnect(to, way, ignoreSystemDisconnection)) {
 					return false;
 				}
 			} else {
-				((CoreRoutedPipe)((TileGenericPipe) to).pipe).globalIgnoreConnectionDisconnection = true;
-				if (!arePipesConnected((TileGenericPipe) from, to, way)) {
-					((CoreRoutedPipe)((TileGenericPipe) to).pipe).globalIgnoreConnectionDisconnection = false;
+				((CoreRoutedPipe)((lp_TileGenericPipe) to).pipe).globalIgnoreConnectionDisconnection = true;
+				if (!arePipesConnected((lp_TileGenericPipe) from, to, way)) {
+					((CoreRoutedPipe)((lp_TileGenericPipe) to).pipe).globalIgnoreConnectionDisconnection = false;
 					return false;
 				}
 				((CoreRoutedPipe)((TileGenericPipe) to).pipe).globalIgnoreConnectionDisconnection = false;
@@ -149,6 +150,7 @@ public class BuildCraftProxy {
 	}
 
 	public boolean arePipesConnected(TileGenericPipe tile, TileEntity with, ForgeDirection side) {
+		tile.
 		try {
 			return (Boolean) arePipesConnected.invoke(tile, with, side);
 		} catch (IllegalAccessException e) {

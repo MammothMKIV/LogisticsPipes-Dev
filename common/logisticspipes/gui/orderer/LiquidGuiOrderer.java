@@ -12,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class LiquidGuiOrderer extends GuiOrderer {
 
 	public LiquidGuiOrderer(PipeLiquidRequestLogistics pipe, EntityPlayer entityPlayer) {
-		super(pipe.xCoord, pipe.yCoord, pipe.zCoord, MainProxy.getDimensionForWorld(pipe.worldObj), entityPlayer);
+		super(pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord, MainProxy.getDimensionForWorld(pipe.container.worldObj), entityPlayer);
 		refreshItems();
 	}
 

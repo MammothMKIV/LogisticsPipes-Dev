@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import logistics_bc.transport.lp_TileGenericPipe;
 import logisticspipes.LogisticsPipes;
 import logisticspipes.api.IRoutedPowerProvider;
 import logisticspipes.interfaces.ISendRoutedItem;
@@ -246,7 +247,7 @@ public class ItemModule extends LogisticsItem {
 	public boolean onItemUse(final ItemStack par1ItemStack, final EntityPlayer par2EntityPlayer, final World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
 		if(MainProxy.isServer(par2EntityPlayer.worldObj)) {
 			TileEntity tile = par3World.getBlockTileEntity(par4, par5, par6);
-			if(tile instanceof LogisticsTileGenericPipe) {
+			if(tile instanceof lp_TileGenericPipe) {
 				return true;
 			}
 			openConfigGui(par1ItemStack, par2EntityPlayer, par3World);

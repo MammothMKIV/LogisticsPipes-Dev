@@ -38,13 +38,13 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.transport.IPipeEntry;
 import buildcraft.api.transport.IPipedItem;
-import buildcraft.core.EntityPassiveItem;
-import buildcraft.core.proxy.CoreProxy;
-import buildcraft.core.utils.Utils;
-import buildcraft.transport.EntityData;
-import buildcraft.transport.IItemTravelingHook;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.core.EntityPassiveItem;
+import logistics_bc.core.proxy.CoreProxy;
+import logistics_bc.core.utils.Utils;
+import logistics_bc.transport.EntityData;
+import logistics_bc.transport.IItemTravelingHook;
+import logistics_bc.transport.PipeTransportItems;
+import logistics_bc.transport.TileGenericPipe;
 
 public class PipeTransportLogistics extends PipeTransportItems implements IItemTravelingHook {
 
@@ -71,16 +71,16 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 	@Override
 	public void initialize() {
 		super.initialize();
-		if(MainProxy.isServer(worldObj)) {
+		if(MainProxy.isServer(container.worldObj)) {
 			//cache chunk for marking dirty
-			chunk = worldObj.getChunkFromBlockCoords(xCoord, zCoord);
+			chunk = worldObj.getChunkFromBlockCoords(container.xCoord, container.zCoord);
 		}
 	}
 
 	public void markChunkModified(TileEntity tile) {
 		if(tile != null && chunk != null) {
 			//items are crossing a chunk boundary, mark both chunks modified
-			if(xCoord >> 4 != tile.xCoord >> 4 || zCoord >> 4 != tile.zCoord >> 4) {
+			if(container.xCoord >> 4 != tile.xCoord >> 4 || zCoord >> 4 != tile.zCoord >> 4) {
 				chunk.isModified = true;
 				if(tile instanceof TileGenericPipe && ((TileGenericPipe) tile).pipe != null && ((TileGenericPipe) tile).pipe.transport instanceof PipeTransportLogistics && ((PipeTransportLogistics)((TileGenericPipe) tile).pipe.transport).chunk != null) {
 					((PipeTransportLogistics)((TileGenericPipe) tile).pipe.transport).chunk.isModified = true;
@@ -127,8 +127,8 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 				if (currentTimeOut > 0){
 					next.getValue().setValue1(currentTimeOut - 1);
 				} else {
-					EntityPassiveItem item = new EntityPassiveItem(worldObj, this.xCoord + 0.5F, this.yCoord + Utils.getPipeFloorOf(next.getKey()) - 0.1, this.zCoord + 0.5, next.getKey());
-					IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(worldObj, item);
+					EntityPassiveItem item = new EntityPassiveItem(container.worldObj, this.xCoord + 0.5F, this.yCoord + Utils.getPipeFloorOf(next.getKey()) - 0.1, this.zCoord + 0.5, next.getKey());
+					IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(container.worldObj, item);
 					routedItem.setDoNotBuffer(true);
 					routedItem.setBufferCounter(next.getValue().getValue2() + 1);
 					toAdd.add(routedItem);
@@ -145,7 +145,7 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 		Iterator<ItemStack> iterator = _itemBuffer.keySet().iterator();
 		while (iterator.hasNext()){
 			ItemStack next = iterator.next();
-			SimpleServiceLocator.buildCraftProxy.dropItems(worldObj, next, this.xCoord, this.yCoord, this.zCoord);
+			SimpleServiceLocator.buildCraftProxy.dropItems(container.worldObj, next, this.xCoord, this.yCoord, this.zCoord);
 			iterator.remove();
 		}
 	}
@@ -156,14 +156,14 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 		if(data.item != null && data.item.getItemStack() != null) {
 			getPipe().relayedItem(data.item.getItemStack().stackSize);
 		}
-		data.item.setWorld(worldObj);
+		data.item.setWorld(container.worldObj);
 		
 		ForgeDirection blocked = null;
 		
 		if(!(data.item instanceof IRoutedItem) && data.item != null) {
 			IPipedItem result = getPipe().getQueuedForItemStack(data.item.getItemStack());
 			if(result != null) {
-				IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.GetOrCreateRoutedItem(worldObj, data);
+				IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.GetOrCreateRoutedItem(container.worldObj, data);
 				if(routedItem instanceof RoutedEntityItem && result instanceof RoutedEntityItem) {
 					((RoutedEntityItem)routedItem).useInformationFrom((RoutedEntityItem)result);
 					blocked = data.input.getOpposite();
@@ -173,14 +173,14 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 			}
 		}
 		
-		IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.GetOrCreateRoutedItem(worldObj, data);
+		IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.GetOrCreateRoutedItem(container.worldObj, data);
 		ForgeDirection value;
 		if(this.getPipe().stillNeedReplace()){
 			routedItem.setDoNotBuffer(false);
 			value = ForgeDirection.UNKNOWN;
 		} else
 			value = getPipe().getRouteLayer().getOrientationForItem(routedItem, blocked);
-		if (value == null && MainProxy.isClient(worldObj)) {
+		if (value == null && MainProxy.isClient(container.worldObj)) {
 			routedItem.getItemStack().stackSize = 0;
 			scheduleRemoval(data.item);
 			return ForgeDirection.UNKNOWN;
@@ -270,15 +270,15 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 				item.setSpeed(Math.min(Math.max(item.getSpeed(), Utils.pipeNormalSpeed * defaultBoost * multiplyerSpeed), 1.0F));
 			}
 		}
-		if (MainProxy.isClient(worldObj)) {
-			MainProxy.spawnParticle(Particles.GoldParticle, xCoord, yCoord, zCoord, 1);
+		if (MainProxy.isClient(container.worldObj)) {
+			MainProxy.spawnParticle(Particles.GoldParticle, container.xCoord, container.yCoord, container.zCoord, 1);
 		}
 	}
 	
 	//BC copy
 	private void handleTileReached(EntityData data, TileEntity tile) {
 		boolean isSpecialConnectionInformationTransition = false;
-		if (!CoreProxy.proxy.isRenderWorld(worldObj)) {
+		if (!CoreProxy.proxy.isRenderWorld(container.worldObj)) {
 			if(SimpleServiceLocator.specialtileconnection.needsInformationTransition(tile)) {
 				isSpecialConnectionInformationTransition = true;
 				SimpleServiceLocator.specialtileconnection.transmit(tile, data);
@@ -290,7 +290,7 @@ public class PipeTransportLogistics extends PipeTransportItems implements IItemT
 			TileGenericPipe pipe = (TileGenericPipe) tile;
 			((PipeTransportItems) pipe.pipe.transport).entityEntering(data.item, data.output);
 		} else if (tile instanceof IInventory) {
-			if (!CoreProxy.proxy.isRenderWorld(worldObj)) {
+			if (!CoreProxy.proxy.isRenderWorld(container.worldObj)) {
 				//LogisticsPipes start
 				if(!isSpecialConnectionInformationTransition && !isItemExitable(data.item.getItemStack())) {
 					return;

@@ -1,10 +1,10 @@
 package logisticspipes.pipes.basic.liquid;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;;
 
-public class LogisticsLiquidSection extends LiquidTank {
+public class LogisticsLiquidSection extends FluidTank {
 
 	public LogisticsLiquidSection(int capacity) {
 		super(capacity);
@@ -12,14 +12,14 @@ public class LogisticsLiquidSection extends LiquidTank {
 
 	@Override
 	public LogisticsLiquidSection readFromNBT(NBTTagCompound compoundTag) {
-		setLiquid(LiquidStack.loadLiquidStackFromNBT(compoundTag));
+		setFluid(FluidStack.loadFluidStackFromNBT(compoundTag));
 		return this;
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound subTag) {
-		if (this.getLiquid() != null) {
-			return this.getLiquid().writeToNBT(subTag);
+		if (this.getFluid() != null) {
+			return this.getFluid().writeToNBT(subTag);
 		}
 		return null;
 	}

@@ -5,7 +5,7 @@ import logisticspipes.utils.ItemIdentifier;
 import logisticspipes.utils.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import buildcraft.silicon.TileAdvancedCraftingTable;
+import logistics_bc.silicon.TileAdvancedCraftingTable;
 
 public class AssemblyAdvancedWorkbench implements ICraftingRecipeProvider {
 	@Override

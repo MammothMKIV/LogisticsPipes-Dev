@@ -80,42 +80,42 @@ public class DummyContainer extends Container{
 	 * @param yCoord yCoord of TopLeft corner of where the slot should be rendered
 	 */
 	public void addDummySlot(int slotId, int xCoord, int yCoord){
-		addSlotToContainer(new DummySlot(_dummyInventory, slotId, xCoord, yCoord));
+		addSlotToContainer(new DummySlot(_dummyInventory, slotId, container.xCoord, container.yCoord));
 	}
 	
 	public void addNormalSlot(int slotId, IInventory inventory, int xCoord, int yCoord){
-		addSlotToContainer(new Slot(inventory, slotId, xCoord, yCoord));
+		addSlotToContainer(new Slot(inventory, slotId, container.xCoord, container.yCoord));
 	}
 
 	public void addRestrictedSlot(int slotId, IInventory inventory, int xCoord, int yCoord, int ItemID) {
-		addSlotToContainer(new RestrictedSlot(inventory, slotId, xCoord, yCoord, ItemID));
+		addSlotToContainer(new RestrictedSlot(inventory, slotId, container.xCoord, container.yCoord, ItemID));
 	}
 	public void addStaticRestrictedSlot(int slotId, IInventory inventory, int xCoord, int yCoord, int ItemID, int stackLimit) {
-		addSlotToContainer(new StaticRestrictedSlot(inventory, slotId, xCoord, yCoord, ItemID, stackLimit));
+		addSlotToContainer(new StaticRestrictedSlot(inventory, slotId, container.xCoord, container.yCoord, ItemID, stackLimit));
 	}
 
 	public void addRestrictedSlot(int slotId, IInventory inventory, int xCoord, int yCoord, ISlotCheck slotCheck) {
-		addSlotToContainer(new RestrictedSlot(inventory, slotId, xCoord, yCoord, slotCheck));
+		addSlotToContainer(new RestrictedSlot(inventory, slotId, container.xCoord, container.yCoord, slotCheck));
 	}
 	public void addStaticRestrictedSlot(int slotId, IInventory inventory, int xCoord, int yCoord, ISlotCheck slotCheck, int stackLimit) {
-		addSlotToContainer(new StaticRestrictedSlot(inventory, slotId, xCoord, yCoord, slotCheck, stackLimit));
+		addSlotToContainer(new StaticRestrictedSlot(inventory, slotId, container.xCoord, container.yCoord, slotCheck, stackLimit));
 	}
 
 	
 	public void addModuleSlot(int slotId, IInventory inventory, int xCoord, int yCoord, PipeLogisticsChassi pipe) {
-		addSlotToContainer(new ModuleSlot(inventory, slotId, xCoord, yCoord, pipe));
+		addSlotToContainer(new ModuleSlot(inventory, slotId, container.xCoord, container.yCoord, pipe));
 	}
 	
 	public void addLiquidSlot(int slotId, IInventory inventory, int xCoord, int yCoord) {
-		addSlotToContainer(new LiquidSlot(inventory, slotId, xCoord, yCoord));
+		addSlotToContainer(new LiquidSlot(inventory, slotId, container.xCoord, container.yCoord));
 	}
 	
 	public void addColorSlot(int slotId, IInventory inventory, int xCoord, int yCoord) {
-		addSlotToContainer(new ColorSlot(inventory, slotId, xCoord, yCoord));
+		addSlotToContainer(new ColorSlot(inventory, slotId, container.xCoord, container.yCoord));
 	}
 
 	public void addUnmodifiableSlot(int slotId, IInventory inventory, int xCoord, int yCoord) {
-		addSlotToContainer(new UnmodifiableSlot(inventory, slotId, xCoord, yCoord));
+		addSlotToContainer(new UnmodifiableSlot(inventory, slotId, container.xCoord, container.yCoord));
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class DummyContainer extends Container{
 			}
 			LiquidIdentifier ident = null;
 			if(slot.getStack() != null) {
-				ident = ItemIdentifier.get(slot.getStack()).getLiquidIdentifier();
+				ident = ItemIdentifier.get(slot.getStack()).getFluidIdentifier();
 			}
 			if(mouseButton == 0) {
 				if(ident != null) {

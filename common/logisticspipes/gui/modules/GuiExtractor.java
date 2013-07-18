@@ -21,7 +21,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.Pipe;
 
 public class GuiExtractor extends GuiWithPreviousGuiContainer {
 
@@ -70,7 +70,7 @@ public class GuiExtractor extends GuiWithPreviousGuiContainer {
 		
 		if(slot >= 0) {
 //TODO 		MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.EXTRACTOR_MODULE_DIRECTION_SET, pipe.xCoord, pipe.yCoord, pipe.zCoord, _directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).getPacket());
-			MainProxy.sendPacketToServer(PacketHandler.getPacket(ExtractorModuleDirectionPacket.class).setInteger(_directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).setPosX(pipe.xCoord).setPosY(pipe.yCoord).setPosZ(pipe.zCoord));
+			MainProxy.sendPacketToServer(PacketHandler.getPacket(ExtractorModuleDirectionPacket.class).setInteger(_directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).setPosX(pipe.container.xCoord).setPosY(pipe.container.yCoord).setPosZ(pipe.container.zCoord));
 		} else {
 //TODO 		MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.EXTRACTOR_MODULE_DIRECTION_SET, 0, -1, _directionReceiver.getZ(), _directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).getPacket());	
 			MainProxy.sendPacketToServer(PacketHandler.getPacket(ExtractorModuleDirectionPacket.class).setInteger(_directionReceiver.getSneakyDirection().ordinal() + (slot * 10)).setPosX(0).setPosY(-1).setPosZ(_directionReceiver.getZ()));

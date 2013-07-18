@@ -3,7 +3,7 @@ package logisticspipes.proxy.interfaces;
 import logisticspipes.utils.ItemIdentifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 import cpw.mods.fml.common.network.Player;
 
 public interface IProxy {

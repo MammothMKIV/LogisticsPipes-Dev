@@ -14,7 +14,7 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.Pipe;
 
 public class GuiProvider extends GuiWithPreviousGuiContainer {
 	
@@ -69,7 +69,7 @@ public class GuiProvider extends GuiWithPreviousGuiContainer {
 			_provider.setFilterExcluded(!_provider.isExcludeFilter());
 			if(_slot >= 0) {
 //TODO 			MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_CHANGE_INCLUDE, _pipe.xCoord, _pipe.yCoord, _pipe.zCoord, _slot).getPacket());
-				MainProxy.sendPacketToServer(PacketHandler.getPacket(ProviderModuleIncludePacket.class).setInteger(_slot).setPosX(_pipe.xCoord).setPosY(_pipe.yCoord).setPosZ(_pipe.zCoord));
+				MainProxy.sendPacketToServer(PacketHandler.getPacket(ProviderModuleIncludePacket.class).setInteger(_slot).setPosX(_pipe.container.xCoord).setPosY(_pipe.container.yCoord).setPosZ(_pipe.container.zCoord));
 			} else {
 //TODO 			MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_CHANGE_INCLUDE, _provider.getX(), _provider.getY(), _provider.getZ(), _slot).getPacket());	
 				MainProxy.sendPacketToServer(PacketHandler.getPacket(ProviderModuleIncludePacket.class).setInteger(_slot).setPosX(_provider.getX()).setPosY(_provider.getY()).setPosZ(_provider.getZ()));
@@ -78,7 +78,7 @@ public class GuiProvider extends GuiWithPreviousGuiContainer {
 			_provider.nextExtractionMode();
 			if(_slot >= 0) {
 //TODO 			MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_NEXT_MODE, _pipe.xCoord, _pipe.yCoord, _pipe.zCoord, _slot).getPacket());
-				MainProxy.sendPacketToServer(PacketHandler.getPacket(ProviderModuleNextModePacket.class).setInteger(_slot).setPosX(_pipe.xCoord).setPosY(_pipe.yCoord).setPosZ(_pipe.zCoord));
+				MainProxy.sendPacketToServer(PacketHandler.getPacket(ProviderModuleNextModePacket.class).setInteger(_slot).setPosX(_pipe.container.xCoord).setPosY(_pipe.container.yCoord).setPosZ(_pipe.container.zCoord));
 			} else {
 //TODO 			MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.PROVIDER_MODULE_NEXT_MODE, _provider.getX(), _provider.getY(), _provider.getZ(), _slot).getPacket());
 				MainProxy.sendPacketToServer(PacketHandler.getPacket(ProviderModuleNextModePacket.class).setInteger(_slot).setPosX(_provider.getX()).setPosY(_provider.getY()).setPosZ(_provider.getZ()));

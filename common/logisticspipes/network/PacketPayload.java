@@ -1,6 +1,6 @@
 package logisticspipes.network;
 
-import buildcraft.core.utils.Utils;
+import logistics_bc.core.utils.Utils;
 
 public class PacketPayload {
 

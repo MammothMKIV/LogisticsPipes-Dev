@@ -54,14 +54,14 @@ import logisticspipes.utils.ItemIdentifier;
 import logisticspipes.utils.ItemIdentifierStack;
 import logisticspipes.utils.Pair3;
 import logisticspipes.utils.PlayerCollectionList;
-import logisticspipes.utils.SidedInventoryForgeAdapter;
 import logisticspipes.utils.SidedInventoryMinecraftAdapter;
 import logisticspipes.utils.SinkReply;
 import logisticspipes.utils.WorldUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeEntry;
+import logistics_bc.transport.lp_TileGenericPipe;
 import cpw.mods.fml.common.network.Player;
 
 public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvideItems, IHeadUpDisplayRendererProvider, IChestContentReceiver, IChangeListener, IOrderManagerContentReceiver {
@@ -110,10 +110,10 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 		
 		
 		int count = 0;
-		WorldUtil wUtil = new WorldUtil(worldObj, getX(), getY(), getZ());
+		WorldUtil wUtil = new WorldUtil(container.worldObj, getX(), getY(), getZ());
 		for (AdjacentTile tile : wUtil.getAdjacentTileEntities(true)){
 			if (!(tile.tile instanceof IInventory)) continue;
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			IInventoryUtil inv = this.getAdaptedInventoryUtil(tile);
 			count += inv.itemCount(item);
 		}
@@ -135,10 +135,10 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 	private int sendStack(ItemIdentifierStack stack, int maxCount, int destination, List<IRelayItem> relays) {
 		ItemIdentifier item = stack.getItem();
 		
-		WorldUtil wUtil = new WorldUtil(worldObj, getX(), getY(), getZ());
+		WorldUtil wUtil = new WorldUtil(container.worldObj, getX(), getY(), getZ());
 		for (AdjacentTile tile : wUtil.getAdjacentTileEntities(true)){
 			if (!(tile.tile instanceof IInventory)) continue;
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			
 			IInventoryUtil inv = getAdaptedInventoryUtil(tile);
 			int available = inv.itemCount(item);
@@ -172,7 +172,7 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 			int sent = removed.stackSize;
 			useEnergy(sent * neededEnergy());
 
-			IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(removed, this.worldObj);
+			IRoutedItem routedItem = SimpleServiceLocator.buildCraftProxy.CreateRoutedItem(removed, this.container.worldObj);
 			routedItem.setDestination(destination);
 			routedItem.setTransportMode(TransportMode.Active);
 			routedItem.addRelayPoints(relays);
@@ -189,9 +189,6 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 		IInventory base = (IInventory) tile.tile;
 		if(base instanceof net.minecraft.inventory.ISidedInventory) {
 			base = new SidedInventoryMinecraftAdapter((net.minecraft.inventory.ISidedInventory)base, tile.orientation.getOpposite(),false);
-		}
-		if(base instanceof net.minecraftforge.common.ISidedInventory) {
-			base = new SidedInventoryForgeAdapter((net.minecraftforge.common.ISidedInventory)base, tile.orientation.getOpposite());
 		}
 		ExtractionMode mode = ((LogicProvider)logic).getExtractionMode();
 		switch(mode){
@@ -226,7 +223,7 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 	@Override
 	public void enabledUpdateEntity() {
 		
-		if(worldObj.getWorldTime() % 6 == 0) {
+		if(container.worldObj.getWorldTime() % 6 == 0) {
 			updateInv(null);
 		}
 		
@@ -234,7 +231,7 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 			checkContentUpdate(null);
 		}
 		
-		if (!_orderManager.hasOrders() || worldObj.getWorldTime() % 6 != 0) return;
+		if (!_orderManager.hasOrders() || container.worldObj.getWorldTime() % 6 != 0) return;
 
 		int itemsleft = itemsToExtract();
 		int stacksleft = stacksToExtract();
@@ -246,7 +243,7 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 			order = _orderManager.peekAtTopRequest();
 			int sent = sendStack(order.getValue1(), itemsleft, order.getValue2().getRouter().getSimpleID(), order.getValue3());
 			if(sent < 0) break;
-			MainProxy.sendSpawnParticlePacket(Particles.VioletParticle, getX(), getY(), getZ(), this.worldObj, 3);
+			MainProxy.sendSpawnParticlePacket(Particles.VioletParticle, getX(), getY(), getZ(), container.worldObj, 3);
 			stacksleft -= 1;
 			itemsleft -= sent;
 		}
@@ -282,7 +279,7 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 	@Override
 	public void fullFill(LogisticsPromise promise, IRequestItems destination) {
 		_orderManager.addOrder(new ItemIdentifierStack(promise.item, promise.numberOfItems), destination, promise.relayPoints);
-		MainProxy.sendSpawnParticlePacket(Particles.WhiteParticle, getX(), getY(), getZ(), this.worldObj, 2);
+		MainProxy.sendSpawnParticlePacket(Particles.WhiteParticle, getX(), getY(), getZ(), container.worldObj, 2);
 	}
 
 	@Override
@@ -293,10 +290,10 @@ public class PipeItemsProviderLogistics extends CoreRoutedPipe implements IProvi
 		LogicProvider providerLogic = (LogicProvider) logic;
 		HashMap<ItemIdentifier, Integer> addedItems = new HashMap<ItemIdentifier, Integer>();
 		
-		WorldUtil wUtil = new WorldUtil(worldObj, getX(), getY(), getZ());
+		WorldUtil wUtil = new WorldUtil(container.worldObj, getX(), getY(), getZ());
 		for (AdjacentTile tile : wUtil.getAdjacentTileEntities(true)){
 			if (!(tile.tile instanceof IInventory)) continue;
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			IInventoryUtil inv = this.getAdaptedInventoryUtil(tile);
 			
 			Map<ItemIdentifier, Integer> currentInv = inv.getItemsAndCount();
@@ -379,7 +376,7 @@ outer:
 
 	private void checkContentUpdate(EntityPlayer player) {
 		doContentUpdate = false;
-		LinkedList<ItemIdentifierStack> all = _orderManager.getContentList(this.worldObj);
+		LinkedList<ItemIdentifierStack> all = _orderManager.getContentList(container.worldObj);
 		if(!oldManagerList.equals(all)) {
 			oldManagerList.clear();
 			oldManagerList.addAll(all);
@@ -428,11 +425,11 @@ outer:
 
 	@Override //work in progress, currently not active code.
 	public Set<ItemIdentifier> getSpecificInterests() {
-		WorldUtil wUtil = new WorldUtil(worldObj, getX(), getY(), getZ());
+		WorldUtil wUtil = new WorldUtil(container.worldObj, getX(), getY(), getZ());
 		Set<ItemIdentifier> l1 = null;
 		for (AdjacentTile tile : wUtil.getAdjacentTileEntities(true)){
 			if (!(tile.tile instanceof IInventory)) continue;
-			if (tile.tile instanceof TileGenericPipe) continue;
+			if (tile.tile instanceof IPipeEntry) continue;
 			
 			IInventoryUtil inv = getAdaptedInventoryUtil(tile);
 			Set<ItemIdentifier> items = inv.getItems();

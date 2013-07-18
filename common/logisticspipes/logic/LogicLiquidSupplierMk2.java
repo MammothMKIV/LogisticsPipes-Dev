@@ -23,9 +23,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import buildcraft.transport.TileGenericPipe;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.IFluidHandler;
+import logistics_bc.transport.lp_TileGenericPipe;
 import cpw.mods.fml.common.network.Player;
 
 public class LogicLiquidSupplierMk2 extends BaseRoutingLogic implements IRequireReliableLiquidTransport {
@@ -45,30 +46,30 @@ public class LogicLiquidSupplierMk2 extends BaseRoutingLogic implements IRequire
 
 	@Override
 	public void throttledUpdateEntity() {
-		if (MainProxy.isClient(worldObj)) return;
+		if (MainProxy.isClient(container.worldObj)) return;
 		super.throttledUpdateEntity();
 		if(dummyInventory.getStackInSlot(0) == null) return;
-		WorldUtil worldUtil = new WorldUtil(worldObj, xCoord, yCoord, zCoord);
+		WorldUtil worldUtil = new WorldUtil(container.worldObj, container.xCoord, container.yCoord, container.zCoord);
 		for (AdjacentTile tile :  worldUtil.getAdjacentTileEntities(true)){
-			if (!(tile.tile instanceof ITankContainer) || tile.tile instanceof TileGenericPipe) continue;
-			ITankContainer container = (ITankContainer) tile.tile;
-			if (container.getTanks(ForgeDirection.UNKNOWN) == null || container.getTanks(ForgeDirection.UNKNOWN).length == 0) continue;
+			if (!(tile.tile instanceof IFluidHandler) || tile.tile instanceof lp_TileGenericPipe) continue;
+			IFluidHandler container = (IFluidHandler) tile.tile;
+			if (container.getTankInfo(ForgeDirection.UNKNOWN) == null || container.getTankInfo(ForgeDirection.UNKNOWN).length == 0) continue;
 			
 			//How much do I want?
 			Map<LiquidIdentifier, Integer> wantLiquids = new HashMap<LiquidIdentifier, Integer>();
-			wantLiquids.put(ItemIdentifier.get(dummyInventory.getStackInSlot(0)).getLiquidIdentifier(), amount);
+			wantLiquids.put(ItemIdentifier.get(dummyInventory.getStackInSlot(0)).getFluidIdentifier(), amount);
 
 			//How much do I have?
 			HashMap<LiquidIdentifier, Integer> haveLiquids = new HashMap<LiquidIdentifier, Integer>();
 			
-			ILiquidTank[] result = container.getTanks(ForgeDirection.UNKNOWN);
-			for (ILiquidTank slot : result){
-				if (slot.getLiquid() == null || !wantLiquids.containsKey(LiquidIdentifier.get(slot.getLiquid()))) continue;
-				Integer liquidWant = haveLiquids.get(LiquidIdentifier.get(slot.getLiquid()));
+			FluidTankInfo[] result = container.getTankInfo(ForgeDirection.UNKNOWN);
+			for (FluidTankInfo slot : result){
+				if (slot.fluid == null || !wantLiquids.containsKey(LiquidIdentifier.get(slot.fluid))) continue;
+				Integer liquidWant = haveLiquids.get(LiquidIdentifier.get(slot.fluid));
 				if (liquidWant==null){
-					haveLiquids.put(LiquidIdentifier.get(slot.getLiquid()), slot.getLiquid().amount);
+					haveLiquids.put(LiquidIdentifier.get(slot.fluid), slot.fluid.amount);
 				} else {
-					haveLiquids.put(LiquidIdentifier.get(slot.getLiquid()), liquidWant +  slot.getLiquid().amount);
+					haveLiquids.put(LiquidIdentifier.get(slot.fluid), liquidWant +  slot.fluid.amount);
 				}
 			}
 			
@@ -189,7 +190,7 @@ public class LogicLiquidSupplierMk2 extends BaseRoutingLogic implements IRequire
 	@Override
 	public void onWrenchClicked(EntityPlayer entityplayer) {
 		if(MainProxy.isServer(entityplayer.worldObj)) {
-			entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_LiquidSupplier_MK2_ID, worldObj, xCoord, yCoord, zCoord);
+			entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_LiquidSupplier_MK2_ID, worldObj, container.xCoord, container.yCoord, container.zCoord);
 		}
 	}
 
@@ -216,6 +217,6 @@ public class LogicLiquidSupplierMk2 extends BaseRoutingLogic implements IRequire
 			amount = 0;
 		}
 //TODO 	MainProxy.sendPacketToPlayer(new PacketPipeInteger(NetworkConstants.LIQUID_SUPPLIER_LIQUID_AMOUNT, xCoord, yCoord, zCoord, amount).getPacket(), (Player)player);
-		MainProxy.sendPacketToPlayer(PacketHandler.getPacket(LiquidSupplierAmount.class).setInteger(amount).setPosX(xCoord).setPosY(yCoord).setPosZ(zCoord), (Player)player);
+		MainProxy.sendPacketToPlayer(PacketHandler.getPacket(LiquidSupplierAmount.class).setInteger(amount).setPosX(container.xCoord).setPosY(container.yCoord).setPosZ(container.zCoord), (Player)player);
 	}
 }

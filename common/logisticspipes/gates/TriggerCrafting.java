@@ -3,8 +3,8 @@ package logisticspipes.gates;
 import logisticspipes.pipes.PipeItemsCraftingLogistics;
 import logisticspipes.textures.provider.LPActionTriggerIconProvider;
 import buildcraft.api.gates.ITriggerParameter;
-import buildcraft.transport.ITriggerPipe;
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.ITriggerPipe;
+import logistics_bc.transport.Pipe;
 
 public class TriggerCrafting extends LPTrigger implements ITriggerPipe {
 

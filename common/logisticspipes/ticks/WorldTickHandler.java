@@ -12,20 +12,20 @@ import logisticspipes.utils.LiquidIdentifier;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.BuildCraftTransport;
+import logistics_bc.lp_BuildCraftTransport;
 import buildcraft.api.core.Position;
-import buildcraft.core.ITileBufferHolder;
-import buildcraft.core.TileBuffer;
-import buildcraft.transport.EntityData;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.core.ITileBufferHolder;
+import logistics_bc.core.TileBuffer;
+import logistics_bc.transport.EntityData;
+import logistics_bc.transport.PipeTransportItems;
+import logistics_bc.transport.lp_TileGenericPipe;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class WorldTickHandler implements ITickHandler {
 	
-	public static LinkedList<TileGenericPipe> clientPipesToReplace = new LinkedList<TileGenericPipe>();
-	public static LinkedList<TileGenericPipe> serverPipesToReplace = new LinkedList<TileGenericPipe>();
+	public static LinkedList<lp_TileGenericPipe> clientPipesToReplace = new LinkedList<lp_TileGenericPipe>();
+	public static LinkedList<lp_TileGenericPipe> serverPipesToReplace = new LinkedList<lp_TileGenericPipe>();
 	private Field entitiesToLoad = null;
 	private Field delayedEntitiesToLoad = null;
 	
@@ -35,7 +35,7 @@ public class WorldTickHandler implements ITickHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		LinkedList<TileGenericPipe> localList;
+		LinkedList<lp_TileGenericPipe> localList;
 		if(type.contains(TickType.CLIENT)) {
 			localList = clientPipesToReplace;
 		} else if(type.contains(TickType.SERVER)) {
@@ -60,7 +60,7 @@ public class WorldTickHandler implements ITickHandler {
 		}
 		while(localList.size() > 0) {
 			try {
-				TileGenericPipe tile = localList.get(0);
+				lp_TileGenericPipe tile = localList.get(0);
 				int x = tile.xCoord;
 				int y = tile.yCoord;
 				int z = tile.zCoord;
@@ -73,7 +73,7 @@ public class WorldTickHandler implements ITickHandler {
 					continue;
 				}
 
-				TileGenericPipe newTile = new LogisticsTileGenericPipe();
+				LogisticsTileGenericPipe newTile = new LogisticsTileGenericPipe();
 				for(Field field:tile.getClass().getDeclaredFields()) {
 					try {
 						field.setAccessible(true);

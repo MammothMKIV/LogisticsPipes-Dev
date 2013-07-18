@@ -21,7 +21,7 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.Pipe;
 
 public class GuiItemSink extends GuiWithPreviousGuiContainer {
 
@@ -51,7 +51,7 @@ public class GuiItemSink extends GuiWithPreviousGuiContainer {
 				//((GuiButton)buttonList.get(0)).displayString = _itemSink.isDefaultRoute() ? "Yes" : "No";
 				if(slot >= 0) {
 //TODO 				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ITEM_SINK_DEFAULT, pipe.xCoord, pipe.yCoord, pipe.zCoord, (_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).getPacket());
-					MainProxy.sendPacketToServer(PacketHandler.getPacket(ItemSinkDefaultPacket.class).setInteger((_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).setPosX(pipe.xCoord).setPosY(pipe.yCoord).setPosZ(pipe.zCoord));
+					MainProxy.sendPacketToServer(PacketHandler.getPacket(ItemSinkDefaultPacket.class).setInteger((_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).setPosX(pipe.container.xCoord).setPosY(pipe.container.yCoord).setPosZ(pipe.container.zCoord));
 				} else {
 //TODO 				MainProxy.sendPacketToServer(new PacketPipeInteger(NetworkConstants.ITEM_SINK_DEFAULT, 0, -1, 0, (_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).getPacket());
 					MainProxy.sendPacketToServer(PacketHandler.getPacket(ItemSinkDefaultPacket.class).setInteger((_itemSink.isDefaultRoute() ? 1 : 0) + (slot * 10)).setPosX(0).setPosY(-1).setPosZ(0));

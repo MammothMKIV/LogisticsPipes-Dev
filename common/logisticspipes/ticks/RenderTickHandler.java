@@ -153,6 +153,6 @@ public class RenderTickHandler implements ITickHandler {
 	}
 	
 	public static void addGuiToReopen(int xCoord, int yCoord, int zCoord, int guiID) {
-		guiPos.add(new GuiEntry(xCoord, yCoord, zCoord, guiID, false));
+		guiPos.add(new GuiEntry(container.xCoord, container.yCoord, container.zCoord, guiID, false));
 	}
 }

@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.transport.IPipeConnection;
 
 public class WorldUtil {
 	private int _x;
@@ -44,11 +44,9 @@ public class WorldUtil {
 			if (tile == null) continue;
 			
 			if(flag) {
-				if(tilePipe instanceof TileGenericPipe) {
-					if(((TileGenericPipe)tilePipe).pipe != null) {
-						if(!((TileGenericPipe)tilePipe).pipe.canPipeConnect(tile, o)) {
-							continue;
-						}
+				if(tilePipe instanceof IPipeConnection) {
+					if(((IPipeConnection)tilePipe).isPipeConnected(o.getOpposite())) {
+						continue;
 					}
 				}
 			}

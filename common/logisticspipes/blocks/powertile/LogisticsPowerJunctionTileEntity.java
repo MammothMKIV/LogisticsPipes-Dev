@@ -31,9 +31,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
@@ -47,7 +47,7 @@ public class LogisticsPowerJunctionTileEntity extends TileEntity implements IPow
 	public final int IC2Multiplier = 2;
 	public final int MAX_STORAGE = 2000000;
 	
-	private IPowerProvider powerFramework;
+	private PowerHandler powerBuffer;
 	
 	private List<EntityPlayer> guiListener = new PlayerCollectionList();
 	
@@ -62,8 +62,7 @@ public class LogisticsPowerJunctionTileEntity extends TileEntity implements IPow
 	private IHeadUpDisplayRenderer HUD;
 	
 	public LogisticsPowerJunctionTileEntity() {
-		powerFramework = PowerFramework.currentFramework.createPowerProvider();
-		powerFramework.configure(0, 1, 250, 1, 750);
+		powerBuffer.configure(0, 250, 750, 750);//.configure(0, 1, 250, 1, 750);
 		HUD = new HUDPowerJunction(this);
 	}
 	@Override
@@ -136,12 +135,12 @@ public class LogisticsPowerJunctionTileEntity extends TileEntity implements IPow
 	public void updateEntity() {
 		super.updateEntity();
 		if(MainProxy.isServer(worldObj)) {
-			float energy = Math.min(powerFramework.getEnergyStored(), freeSpace() / BuildCraftMultiplier);
-			if(freeSpace() > 0 && energy == 0 && powerFramework.getEnergyStored() > 0) {
+			float energy = Math.min(powerBuffer.getEnergyStored(), freeSpace() / BuildCraftMultiplier);
+			if(freeSpace() > 0 && energy == 0 && powerBuffer.getEnergyStored() > 0) {
 				energy = 1;
 			}
-			if(powerFramework.useEnergy(energy, energy, false) == energy) {
-				powerFramework.useEnergy(energy, energy, true);
+			if(powerBuffer.useEnergy(energy, energy, false) == energy) {
+				powerBuffer.useEnergy(energy, energy, true);
 				addEnergy(energy * BuildCraftMultiplier);
 			}
 		  	if(internalStorage != lastUpdateStorage) {
@@ -193,24 +192,6 @@ public class LogisticsPowerJunctionTileEntity extends TileEntity implements IPow
 			SimpleServiceLocator.IC2Proxy.unregisterToEneryNet(this);
 			addedToEnergyNet = false;
 		}
-	}
-
-	@Override
-	public void setPowerProvider(IPowerProvider provider) {
-		powerFramework = provider;
-	}
-
-	@Override
-	public IPowerProvider getPowerProvider() {
-		return powerFramework;
-	}
-
-	@Override
-	public void doWork() {}
-
-	@Override
-	public int powerRequest(ForgeDirection from) {
-		return Math.min(powerFramework.getMaxEnergyReceived(), freeSpace() / BuildCraftMultiplier);
 	}
 
 	@Override
@@ -379,4 +360,16 @@ public class LogisticsPowerJunctionTileEntity extends TileEntity implements IPow
 	@Override
 	@ModDependentMethod(modId="ComputerCraft")
 	public void detach(IComputerAccess computer) {}
+	
+	@Override
+	public PowerReceiver getPowerReceiver(ForgeDirection side) {
+		return powerBuffer.getPowerReceiver();
+//				return Math.min(powerFramework.getMaxEnergyReceived(), freeSpace() / BuildCraftMultiplier);
+
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void doWork(PowerHandler workProvider) {
+		
+	}
 }

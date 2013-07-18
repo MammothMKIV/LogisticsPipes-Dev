@@ -59,7 +59,7 @@ public class PipeItemsRequestLogistics extends CoreRoutedPipe implements IReques
 	}
 	
 	public void openGui(EntityPlayer entityplayer) {
-		entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Orderer_ID, this.worldObj, this.getX() , this.getY(), this.getZ());
+		entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Normal_Orderer_ID, container.worldObj, this.getX() , this.getY(), this.getZ());
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class PipeItemsRequestLogistics extends CoreRoutedPipe implements IReques
 	
 	@Override
 	public void enabledUpdateEntity() {
-		if (this.worldObj.getWorldTime() % 1200 == 0){
+		if (container.worldObj.getWorldTime() % 1200 == 0){
 			_history.addLast(SimpleServiceLocator.logisticsManager.getAvailableItems(getRouter().getIRoutersByCost()));
 			if (_history.size() > 20){
 				_history.removeFirst();

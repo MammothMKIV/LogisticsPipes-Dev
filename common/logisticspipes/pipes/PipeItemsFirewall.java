@@ -71,7 +71,7 @@ public class PipeItemsFirewall extends CoreRoutedPipe {
 	@Override
 	public void ignoreDisableUpdateEntity() {
 		for(ForgeDirection dir: ForgeDirection.VALID_DIRECTIONS) {
-			getRouter(dir).update(worldObj.getWorldTime() % Configs.LOGISTICS_DETECTION_FREQUENCY == _delayOffset || _initialInit);
+			getRouter(dir).update(container.worldObj.getWorldTime() % Configs.LOGISTICS_DETECTION_FREQUENCY == _delayOffset || _initialInit);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class PipeItemsFirewall extends CoreRoutedPipe {
 					if (routerIds[dir.ordinal()] == null || routerIds[dir.ordinal()].isEmpty()) {
 						routerIds[dir.ordinal()] = UUID.randomUUID().toString();
 					}
-					routers[dir.ordinal()] = SimpleServiceLocator.routerManager.getOrCreateFirewallRouter(UUID.fromString(routerIds[dir.ordinal()]), MainProxy.getDimensionForWorld(worldObj), getX(), getY(), getZ(), dir);
+					routers[dir.ordinal()] = SimpleServiceLocator.routerManager.getOrCreateFirewallRouter(UUID.fromString(routerIds[dir.ordinal()]), MainProxy.getDimensionForWorld(container.worldObj), getX(), getY(), getZ(), dir);
 				}
 			}
 			return routers[dir.ordinal()];
@@ -136,7 +136,7 @@ public class PipeItemsFirewall extends CoreRoutedPipe {
 				if (routerId == null || routerId == ""){
 					routerId = UUID.randomUUID().toString();
 				}
-				router = SimpleServiceLocator.routerManager.getOrCreateFirewallRouter(UUID.fromString(routerId), MainProxy.getDimensionForWorld(worldObj), getX(), getY(), getZ(), ForgeDirection.UNKNOWN);
+				router = SimpleServiceLocator.routerManager.getOrCreateFirewallRouter(UUID.fromString(routerId), MainProxy.getDimensionForWorld(container.worldObj), getX(), getY(), getZ(), ForgeDirection.UNKNOWN);
 			}
 		}
 		return router;

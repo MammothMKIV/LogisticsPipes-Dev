@@ -2,7 +2,7 @@ package logisticspipes.logic;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.core.network.TileNetworkData;
+import logistics_bc.core.network.TileNetworkData;
 
 public class BaseChassiLogic extends BaseRoutingLogic {
 	

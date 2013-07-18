@@ -71,7 +71,7 @@ public class GuiCraftingPipe extends GuiContainer implements IGuiIDHandlerProvid
         
         for(int i=0;i<liquidCrafter;i++) {
 			int liquidLeft = -(i*40) - 40;
-			dummy.addLiquidSlot(i, logic.getLiquidInventory(), liquidLeft + 13, 22);
+			dummy.addLiquidSlot(i, logic.getFluidInventory(), liquidLeft + 13, 22);
 		}
         
         if(hasByproductExtractor) {
@@ -245,7 +245,7 @@ public class GuiCraftingPipe extends GuiContainer implements IGuiIDHandlerProvid
 		
 		for(int i=0;i<liquidCrafter;i++) {
 			int liquidLeft = -(i*40) - 40;
-			fontRenderer.drawString(Integer.toString(_logic.getLiquidAmount()[i]), liquidLeft + 21 - (fontRenderer.getStringWidth(Integer.toString(_logic.getLiquidAmount()[i])) / 2), 43, 0x404040);
+			fontRenderer.drawString(Integer.toString(_logic.getFluidAmount()[i]), liquidLeft + 21 - (fontRenderer.getStringWidth(Integer.toString(_logic.getFluidAmount()[i])) / 2), 43, 0x404040);
 			fontRenderer.drawString("1", liquidLeft + 18, 57, 0x404040);
 			fontRenderer.drawString("10", liquidLeft + 15, 77, 0x404040);
 			fontRenderer.drawString("100", liquidLeft + 12, 97, 0x404040);
@@ -284,7 +284,7 @@ public class GuiCraftingPipe extends GuiContainer implements IGuiIDHandlerProvid
 			}
 		}
 		for(int i=0;i<liquidCrafter;i++) {
-			if(_logic.getLiquidInventory().getStackInSlot(i) == null && !((!isAdvancedSat && _logic.liquidSatelliteId == 0) || (isAdvancedSat && _logic.liquidSatelliteIdArray[i] == 0))) {
+			if(_logic.getFluidInventory().getStackInSlot(i) == null && !((!isAdvancedSat && _logic.liquidSatelliteId == 0) || (isAdvancedSat && _logic.liquidSatelliteIdArray[i] == 0))) {
 				drawRect(-((i + 1) * 40) + 1, 40, -(i * 40), 142, 0xAA8B8B8B);
 				for(int j=0;j<8;j++) {
 					liquidGuiParts[i][j].enabled = false;

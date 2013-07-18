@@ -5,7 +5,7 @@ import logisticspipes.logic.BaseLogicSatellite;
 import logisticspipes.network.abstractpackets.CoordinatesPacket;
 import logisticspipes.network.abstractpackets.ModernPacket;
 import net.minecraft.entity.player.EntityPlayer;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 
 public class SatPipeNext extends CoordinatesPacket {
 

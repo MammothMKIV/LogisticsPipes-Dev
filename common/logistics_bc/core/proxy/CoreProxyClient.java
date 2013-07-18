@@ -1,0 +1,153 @@
+/**
+ * Copyright (c) SpaceToad, 2011
+ * http://www.mod-buildcraft.com
+ *
+ * BuildCraft is distributed under the terms of the Minecraft Mod Public
+ * License 1.0, or MMPL. Please check the contents of the license located in
+ * http://www.mod-buildcraft.com/MMPL-1.0.txt
+ */
+
+package logistics_bc.core.proxy;
+
+import logistics_bc.lp_BuildCraftCore;
+import buildcraft.api.core.LaserKind;
+import logistics_bc.core.EntityBlock;
+import logistics_bc.core.render.RenderEntityBlock;
+import logistics_bc.core.render.RenderingEntityBlocks;
+import logistics_bc.transport.render.TileEntityPickupFX;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import java.io.File;
+import java.util.List;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
+
+public class CoreProxyClient extends CoreProxy {
+
+	/* INSTANCES */
+	@Override
+	public Object getClient() {
+		return FMLClientHandler.instance().getClient();
+	}
+
+	@Override
+	public World getClientWorld() {
+		return FMLClientHandler.instance().getClient().theWorld;
+	}
+
+	/* ENTITY HANDLING */
+	@Override
+	public void removeEntity(Entity entity) {
+		super.removeEntity(entity);
+
+		if (isRenderWorld(entity.worldObj)) {
+			((WorldClient) entity.worldObj).removeEntityFromWorld(entity.entityId);
+		}
+	}
+
+	/* WRAPPER */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void feedSubBlocks(int id, CreativeTabs tab, List itemList) {
+		if (Block.blocksList[id] == null)
+			return;
+
+		Block.blocksList[id].getSubBlocks(id, tab, itemList);
+	}
+
+	/* LOCALIZATION */
+	@Override
+	public String getCurrentLanguage() {
+		return Minecraft.getMinecraft().func_135016_M().func_135041_c().func_135034_a();
+	}
+
+	@Override
+	public void addName(Object obj, String s) {
+		LanguageRegistry.addName(obj, s);
+	}
+
+	@Override
+	public void addLocalization(String s1, String string) {
+		LanguageRegistry.instance().addStringLocalization(s1, string);
+	}
+
+	@Override
+	public String getItemDisplayName(ItemStack stack) {
+		if (Item.itemsList[stack.itemID] == null)
+			return "";
+
+		return Item.itemsList[stack.itemID].getItemDisplayName(stack);
+	}
+
+	/* GFX */
+	@Override
+	public void obsidianPipePickup(World world, EntityItem item, TileEntity tile) {
+		FMLClientHandler.instance().getClient().effectRenderer.addEffect(new TileEntityPickupFX(world, item, tile));
+	}
+
+	@Override
+	public void initializeRendering() {
+		lp_BuildCraftCore.blockByEntityModel = RenderingRegistry.getNextAvailableRenderId();
+
+		RenderingRegistry.registerBlockHandler(new RenderingEntityBlocks());
+	}
+
+	@Override
+	public void initializeEntityRendering() {
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, RenderEntityBlock.INSTANCE);
+	}
+
+	/* NETWORKING */
+	@Override
+	public void sendToServer(Packet packet) {
+		FMLClientHandler.instance().getClient().getNetHandler().addToSendQueue(packet);
+	}
+
+	/* BUILDCRAFT PLAYER */
+	@Override
+	public String playerName() {
+		return FMLClientHandler.instance().getClient().thePlayer.username;
+	}
+
+	private EntityPlayer createNewPlayer(World world) {
+		EntityPlayer player = new EntityPlayer(world, "[BuildCraft]") {
+			@Override
+			public void sendChatToPlayer(ChatMessageComponent var1) {
+			}
+
+			@Override
+			public boolean canCommandSenderUseCommand(int var1, String var2) {
+				return false;
+			}
+
+			@Override
+			public ChunkCoordinates getPlayerCoordinates() {
+				return null;
+			}
+		};
+		return player;
+	}
+
+	@Override
+	public EntityPlayer getBuildCraftPlayer(World world) {
+		if (CoreProxy.buildCraftPlayer == null) {
+			CoreProxy.buildCraftPlayer = createNewPlayer(world);
+		}
+
+		return CoreProxy.buildCraftPlayer;
+	}
+
+}

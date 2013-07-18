@@ -3,12 +3,12 @@ package logisticspipes.pipes.basic.liquid;
 import logisticspipes.transport.PipeLiquidTransportLogistics;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ITankContainer;
-import buildcraft.core.IMachine;
-import buildcraft.transport.BlockGenericPipe;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.PipeTransportLiquids;
-import buildcraft.transport.TileGenericPipe;
+import net.minecraftforge.fluids.IFluidHandler;
+import logistics_bc.core.IMachine;
+import logistics_bc.transport.BlockGenericPipe;
+import logistics_bc.transport.Pipe;
+import logistics_bc.transport.PipeTransportLiquids;
+import logistics_bc.transport.TileGenericPipe;
 
 public class LogisitcsLiquidConnectionTransport extends PipeTransportLiquids {
 	@Override
@@ -19,8 +19,8 @@ public class LogisitcsLiquidConnectionTransport extends PipeTransportLiquids {
 				return false;
 		}
 
-		if (tile instanceof ITankContainer) {
-			ITankContainer liq = (ITankContainer) tile;
+		if (tile instanceof IFluidHandler) {
+			IFluidHandler liq = (IFluidHandler) tile;
 
 			if (liq.getTanks(side) != null && liq.getTanks(side).length > 0)
 				return true;

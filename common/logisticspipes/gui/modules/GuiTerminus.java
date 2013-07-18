@@ -16,7 +16,7 @@ import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
+import logistics_bc.transport.Pipe;
 
 public class GuiTerminus extends GuiWithPreviousGuiContainer {
 

@@ -18,7 +18,7 @@ import thaumcraft.api.EnumTag;
 import thaumcraft.api.ObjectTags;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.client.lib.UtilsFX;
-import buildcraft.BuildCraftSilicon;
+import logistics_bc.BuildCraftSilicon;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class ThaumCraftProxy implements IThaumCraftProxy {

@@ -234,7 +234,7 @@ public class UpgradeManager implements ISimpleInventoryEventHandler {
 	}
 	
 	public void dropUpgrades(World worldObj, int xCoord, int yCoord, int zCoord) {
-		inv.dropContents(worldObj, xCoord, yCoord, zCoord);
+		inv.dropContents(container.worldObj, container.xCoord, container.yCoord, container.zCoord);
 	}
 
 	public boolean isSideDisconnected(ForgeDirection side) {
@@ -320,7 +320,7 @@ public class UpgradeManager implements ISimpleInventoryEventHandler {
 		return isAdvancedCrafter;
 	}
 	
-	public int getLiquidCrafter() {
+	public int getFluidCrafter() {
 		return liquidCrafter;
 	}
 	

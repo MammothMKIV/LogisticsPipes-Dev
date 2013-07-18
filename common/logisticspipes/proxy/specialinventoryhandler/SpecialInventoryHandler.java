@@ -8,8 +8,8 @@ import logisticspipes.utils.ItemIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import buildcraft.core.inventory.ITransactor;
-import buildcraft.core.inventory.filters.IStackFilter;
+import logistics_bc.core.inventory.ITransactor;
+import logistics_bc.core.inventory.filters.IStackFilter;
 
 public abstract class SpecialInventoryHandler implements IInventoryUtil, ITransactor {
 	public abstract boolean init();

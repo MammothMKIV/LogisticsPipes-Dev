@@ -857,7 +857,7 @@ public class RecipeManager {
 			"GPG",
 			"gLg",
 			Character.valueOf('L'), LogisticsPipes.LogisticsLiquidBasicPipe,
-			Character.valueOf('P'), BuildCraftTransport.pipeLiquidsGold,
+			Character.valueOf('P'), BuildCraftTransport.pipeFluidsGold,
 			Character.valueOf('G'), Block.glass,
 			Character.valueOf('g'), Item.ingotGold
 		});
@@ -911,7 +911,7 @@ public class RecipeManager {
 			"w",
 			"I",
 			Character.valueOf('I'), LogisticsPipes.LogisticsLiquidInsertionPipe,
-			Character.valueOf('w'), BuildCraftTransport.pipeLiquidsWood
+			Character.valueOf('w'), BuildCraftTransport.pipeFluidsWood
 		});
 	}
 }

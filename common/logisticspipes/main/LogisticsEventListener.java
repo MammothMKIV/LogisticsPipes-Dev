@@ -28,7 +28,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.ChunkWatchEvent.UnWatch;
 import net.minecraftforge.event.world.ChunkWatchEvent.Watch;
 import net.minecraftforge.event.world.WorldEvent;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.lp_TileGenericPipe;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -64,17 +64,17 @@ public class LogisticsEventListener implements IPlayerTracker {
 		if(MainProxy.isServer(event.entityPlayer.worldObj)) {
 			if(event.action == Action.LEFT_CLICK_BLOCK) {
 				final TileEntity tile = event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z);
-				if(tile instanceof TileGenericPipe) {
-					if(((TileGenericPipe)tile).pipe instanceof CoreRoutedPipe) {
-						if(!((CoreRoutedPipe)((TileGenericPipe)tile).pipe).canBeDestroyedByPlayer(event.entityPlayer)) {
+				if(tile instanceof lp_TileGenericPipe) {
+					if(((lp_TileGenericPipe)tile).pipe instanceof CoreRoutedPipe) {
+						if(!((CoreRoutedPipe)((lp_TileGenericPipe)tile).pipe).canBeDestroyedByPlayer(event.entityPlayer)) {
 							event.setCanceled(true);
 							event.entityPlayer.sendChatToPlayer("Permission Denied");
-							((TileGenericPipe)tile).scheduleNeighborChange();
+							((lp_TileGenericPipe)tile).scheduleNeighborChange();
 							event.entityPlayer.worldObj.markBlockForUpdate(tile.xCoord, tile.yCoord, tile.zCoord);
-							((CoreRoutedPipe)((TileGenericPipe)tile).pipe).delayTo = System.currentTimeMillis() + 200;
-							((CoreRoutedPipe)((TileGenericPipe)tile).pipe).repeatFor = 10;
+							((CoreRoutedPipe)((lp_TileGenericPipe)tile).pipe).delayTo = System.currentTimeMillis() + 200;
+							((CoreRoutedPipe)((lp_TileGenericPipe)tile).pipe).repeatFor = 10;
 						} else {
-							((CoreRoutedPipe)((TileGenericPipe)tile).pipe).setDestroyByPlayer();
+							((CoreRoutedPipe)((lp_TileGenericPipe)tile).pipe).setDestroyByPlayer();
 						}
 					}
 				}

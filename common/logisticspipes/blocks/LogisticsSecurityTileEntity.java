@@ -32,12 +32,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
-import buildcraft.transport.TileGenericPipe;
+import buildcraft.api.power.IPowerEmitter;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
 import cpw.mods.fml.common.network.Player;
 
-public class LogisticsSecurityTileEntity extends TileEntity implements IGuiOpenControler, ISecurityProvider {
+public class LogisticsSecurityTileEntity extends TileEntity implements IPowerReceptor, IGuiOpenControler, ISecurityProvider {
 	
 	public SimpleInventory inv = new SimpleInventory(1, "ID Slots", 64);
 	private List<EntityPlayer> listener = new PlayerCollectionList();
@@ -63,6 +67,7 @@ public class LogisticsSecurityTileEntity extends TileEntity implements IGuiOpenC
 		super.validate();
 		if(MainProxy.isServer(this.worldObj)) {
 			SimpleServiceLocator.securityStationManager.add(this);
+			this.powerBuffer.configure(10, 100, 10000, 5000); // activation > max power so it just stores power and never activates, will be drawn on as needed
 		}
 	}
 
@@ -192,6 +197,7 @@ public class LogisticsSecurityTileEntity extends TileEntity implements IGuiOpenC
 			break;
 		case 2: //+
 			if(!useEnergy(10)) {
+				
 				player.sendChatToPlayer("No Energy");
 				return;
 			}
@@ -321,20 +327,30 @@ public class LogisticsSecurityTileEntity extends TileEntity implements IGuiOpenC
 					return true;
 				}
 			}
-			if(tile instanceof TileGenericPipe) {
-				if(((TileGenericPipe)tile).pipe instanceof IRoutedPowerProvider) {
-					if(((IRoutedPowerProvider)((TileGenericPipe)tile).pipe).useEnergy(amount)) {
-						return true;
-					}
-				}
-			}
 		}
-		return false;
+		return this.powerBuffer.useEnergy(amount, amount, true)==amount; // note no divide, it's more expensive to pump BC into the station than to run off a power node
 	}
 
 	@Override
 	public void func_85027_a(CrashReportCategory par1CrashReportCategory) {
 		super.func_85027_a(par1CrashReportCategory);
 		par1CrashReportCategory.addCrashSection("LP-Version", LogisticsPipes.VERSION);
+	}
+
+	PowerHandler powerBuffer;
+	@Override
+	public PowerReceiver getPowerReceiver(ForgeDirection side) {
+		return this.powerBuffer.getPowerReceiver();
+	}
+
+	@Override
+	public void doWork(PowerHandler workProvider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public World getWorld() {
+		return worldObj;
 	}
 }

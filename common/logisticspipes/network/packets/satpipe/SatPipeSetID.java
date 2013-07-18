@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.entity.player.EntityPlayer;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 
 @Accessors(chain = true)
 public class SatPipeSetID extends CoordinatesPacket {

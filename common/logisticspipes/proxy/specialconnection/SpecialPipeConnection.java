@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logisticspipes.interfaces.routing.ISpecialPipedConnection;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.TileGenericPipe;
 
 public class SpecialPipeConnection {
 	

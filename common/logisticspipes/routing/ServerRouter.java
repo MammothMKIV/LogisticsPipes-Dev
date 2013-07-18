@@ -49,8 +49,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.LiquidStack;
-import buildcraft.transport.TileGenericPipe;
+import net.minecraftforge.fluids.FluidStack;
+import logistics_bc.transport.lp_TileGenericPipe;
 
 public class ServerRouter implements IRouter, Comparable<ServerRouter> {
 	
@@ -253,8 +253,8 @@ public class ServerRouter implements IRouter, Comparable<ServerRouter> {
 		}
 		TileEntity tile = worldObj.getBlockTileEntity(_xCoord, _yCoord, _zCoord);
 		
-		if (!(tile instanceof TileGenericPipe)) return null;
-		TileGenericPipe pipe = (TileGenericPipe) tile;
+		if (!(tile instanceof lp_TileGenericPipe)) return null;
+		lp_TileGenericPipe pipe = (lp_TileGenericPipe) tile;
 		if (!(pipe.pipe instanceof CoreRoutedPipe)) return null;
 		_myPipeCache=new WeakReference<CoreRoutedPipe>((CoreRoutedPipe) pipe.pipe);
 
@@ -332,7 +332,7 @@ public class ServerRouter implements IRouter, Comparable<ServerRouter> {
 		if(changed) {
 			CoreRoutedPipe pipe = getPipe();
 			if (pipe != null) {
-				pipe.worldObj.notifyBlocksOfNeighborChange(pipe.xCoord, pipe.yCoord, pipe.zCoord, pipe.worldObj.getBlockId(pipe.xCoord, pipe.yCoord, pipe.zCoord));
+				pipe.container.worldObj.notifyBlocksOfNeighborChange(pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord, pipe.container.worldObj.getBlockId(pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord));
 				pipe.refreshConnectionAndRender(false);
 			}
 		}
@@ -608,7 +608,7 @@ public class ServerRouter implements IRouter, Comparable<ServerRouter> {
 		if (pipe != null && pipe.logic instanceof IRequireReliableLiquidTransport) {
 			ItemStack stack = routedEntityItem.getItemStack();
 			if(stack.getItem() instanceof LogisticsLiquidContainer) {
-				LiquidStack liquid = SimpleServiceLocator.logisticsLiquidManager.getLiquidFromContainer(stack);
+				FluidStack liquid = SimpleServiceLocator.logisticsLiquidManager.getFluidFromContainer(stack);
 				((IRequireReliableLiquidTransport)pipe.logic).liquidArrived(LiquidIdentifier.get(liquid), liquid.amount);				
 			}
 		}

@@ -13,8 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
-import buildcraft.BuildCraftCore;
-import buildcraft.BuildCraftSilicon;
+import logistics_bc.BuildCraftCore;
+import logistics_bc.BuildCraftSilicon;
 
 
 public class IC2Proxy implements IIC2Proxy {

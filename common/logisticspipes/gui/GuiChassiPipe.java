@@ -101,9 +101,9 @@ public class GuiChassiPipe extends KraphtBaseGuiScreen implements IGuiIDHandlerP
 			if (module != null){
 				final ModernPacket packet = PacketHandler
 						.getPacket(ChassisGUI.class).setButtonID(guibutton.id)
-						.setPosX(_chassiPipe.xCoord)
-						.setPosY(_chassiPipe.yCoord)
-						.setPosZ(_chassiPipe.zCoord);
+						.setPosX(_chassiPipe.container.xCoord)
+						.setPosY(_chassiPipe.container.yCoord)
+						.setPosZ(_chassiPipe.container.zCoord);
 //TODO Must be handled manualy
 				MainProxy.sendPacketToServer(packet);
 			}

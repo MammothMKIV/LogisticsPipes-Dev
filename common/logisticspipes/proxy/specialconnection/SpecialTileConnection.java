@@ -5,8 +5,8 @@ import java.util.List;
 
 import logisticspipes.interfaces.routing.ISpecialTileConnection;
 import net.minecraft.tileentity.TileEntity;
-import buildcraft.transport.EntityData;
-import buildcraft.transport.TileGenericPipe;
+import logistics_bc.transport.EntityData;
+import logistics_bc.transport.TileGenericPipe;
 
 public class SpecialTileConnection {
 	
