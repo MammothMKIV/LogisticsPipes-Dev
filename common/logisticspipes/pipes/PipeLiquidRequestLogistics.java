@@ -10,7 +10,9 @@ import logisticspipes.textures.Textures;
 import logisticspipes.textures.Textures.TextureType;
 import logisticspipes.utils.LiquidIdentifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 public class PipeLiquidRequestLogistics extends LiquidRoutedPipe implements IRequestLiquid {
 
@@ -19,7 +21,7 @@ public class PipeLiquidRequestLogistics extends LiquidRoutedPipe implements IReq
 	}
 	
 	public void openGui(EntityPlayer entityplayer) {
-		entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Liquid_Orderer_ID, this.worldObj, this.getX() , this.getY(), this.getZ());
+		entityplayer.openGui(LogisticsPipes.instance, GuiIDs.GUI_Liquid_Orderer_ID, this.getWorld(), this.getX() , this.getY(), this.getZ());
 	}
 	
 	@Override
@@ -28,7 +30,7 @@ public class PipeLiquidRequestLogistics extends LiquidRoutedPipe implements IReq
 			if (settings == null || settings.openRequest) {
 				openGui(entityplayer);
 			} else {
-				entityplayer.sendChatToPlayer("Permission denied");
+				entityplayer.sendChatToPlayer(ChatMessageComponent.func_111066_d("Permission denied"));
 			}
 		}
 		return true;
@@ -52,6 +54,12 @@ public class PipeLiquidRequestLogistics extends LiquidRoutedPipe implements IReq
 	@Override
 	public boolean canInsertFromSideToTanks() {
 		return true;
+	}
+
+	@Override
+	public int canSink(FluidStack f) {
+		// TODO Auto-generated method stub
+		return f.amount;
 	}
 
 }

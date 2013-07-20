@@ -32,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
@@ -198,7 +199,7 @@ public class LogisticsSecurityTileEntity extends TileEntity implements IPowerRec
 		case 2: //+
 			if(!useEnergy(10)) {
 				
-				player.sendChatToPlayer("No Energy");
+				player.sendChatToPlayer(ChatMessageComponent.func_111066_d("No Energy"));
 				return;
 			}
 			if(inv.getStackInSlot(0) == null) {
@@ -216,7 +217,7 @@ public class LogisticsSecurityTileEntity extends TileEntity implements IPowerRec
 			break;
 		case 3: //++
 			if(!useEnergy(640)) {
-				player.sendChatToPlayer("No Energy");
+				player.sendChatToPlayer(ChatMessageComponent.func_111066_d("No Energy"));
 				return;
 			}
 			ItemStack stack = new ItemStack(LogisticsPipes.LogisticsItemCard, 64, LogisticsItemCard.SEC_CARD);
@@ -250,7 +251,7 @@ public class LogisticsSecurityTileEntity extends TileEntity implements IPowerRec
 
 	public SecuritySettings getSecuritySettingsForPlayer(EntityPlayer entityplayer, boolean usePower) {
 		if(usePower && !useEnergy(10)) {
-			entityplayer.sendChatToPlayer("No Energy");
+			entityplayer.sendChatToPlayer(ChatMessageComponent.func_111066_d("No Energy"));
 			return new SecuritySettings("No Energy");
 		}
 		SecuritySettings setting = settingsList.get(entityplayer.username);

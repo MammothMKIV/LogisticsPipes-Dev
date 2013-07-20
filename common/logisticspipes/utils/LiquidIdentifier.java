@@ -84,7 +84,7 @@ public class LiquidIdentifier {
 	
 	public static LiquidIdentifier get(FluidStack stack) {
 		if(stack.extra != null) {
-			LogisticsPipes.log.warning("Found FluidStack with NBT tag. LP doesn't know how to handle it.");
+			LogisticsPipes.log.warning("Found FluidStack with NBT tag. LP doesn't know how to handle it."));
 			new Exception().printStackTrace();
 		}
 		return get(stack.fluidID, stack.itemMeta);
@@ -92,7 +92,7 @@ public class LiquidIdentifier {
 	
 	public static LiquidIdentifier get(FluidStack stack, String name) {
 		if(stack.extra != null) {
-			LogisticsPipes.log.warning("Found FluidStack with NBT tag. LP doesn't know how to handle it.");
+			LogisticsPipes.log.warning("Found FluidStack with NBT tag. LP doesn't know how to handle it."));
 			new Exception().printStackTrace();
 		}
 		return get(stack.fluidID, stack.itemMeta, name);

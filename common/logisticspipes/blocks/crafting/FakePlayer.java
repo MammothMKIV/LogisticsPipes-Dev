@@ -14,7 +14,7 @@ public class FakePlayer extends EntityPlayer {
 		username = "[LogisticsPipes]";
 	}
 	
-	@Override public void sendChatToPlayer(String s) {}
+	@Override public void sendChatToPlayer(ChatMessageComponent.func_111066_d m) {}
 	@Override public boolean canCommandSenderUseCommand(int i, String s) {return false;}
 	@Override public ChunkCoordinates getPlayerCoordinates() {return null;}	
 }

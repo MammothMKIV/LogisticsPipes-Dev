@@ -30,6 +30,7 @@ import logisticspipes.routing.ServerRouter;
 import logisticspipes.security.SecuritySettings;
 import logisticspipes.utils.ItemIdentifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraftforge.common.ForgeDirection;
 import logistics_bc.transport.pipes.PipeLogic;
 
@@ -100,12 +101,12 @@ public abstract class BaseRoutingLogic extends PipeLogic{
 			return true;
 		} else if(entityplayer.getCurrentEquippedItem().getItem() == LogisticsPipes.LogisticsRemoteOrderer) {
 			if(MainProxy.isServer(entityplayer.worldObj)) {
-				entityplayer.sendChatToPlayer("Permission denied");
+				entityplayer.sendChatToPlayer(ChatMessageComponent.func_111066_d("Permission denied"));
 			}
 			return true;
 		} else if(entityplayer.getCurrentEquippedItem().getItem() == LogisticsPipes.LogisticsNetworkMonitior) {
 			if(MainProxy.isServer(entityplayer.worldObj)) {
-				entityplayer.sendChatToPlayer("Permission denied");
+				entityplayer.sendChatToPlayer(ChatMessageComponent.func_111066_d("Permission denied"));
 			}
 			return true;
 		}

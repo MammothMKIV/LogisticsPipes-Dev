@@ -23,7 +23,7 @@ public class LogisticsCraftingOverlayHandler implements IOverlayHandler {
 			int y = (ps.rely - 6) / 18;
 			int slot = x + y * 3;
 			if(x < 0 || x > 2 || y < 0 || y > 2 || slot < 0 || slot > 8) {
-				FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("Internal Error. This button is broken.");
+				FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("Internal Error. This button is broken."));
 				return;
 			}
 			if(slot < 9) {

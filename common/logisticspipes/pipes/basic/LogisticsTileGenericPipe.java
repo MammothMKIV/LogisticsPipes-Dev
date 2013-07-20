@@ -27,11 +27,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import logistics_bc.transport.TileGenericPipe;
+import logistics_bc.transport.lp_TileGenericPipe;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 
 @ModDependentInterface(modId={"ComputerCraft"}, interfacePath={"dan200.computer.api.IPeripheral"})
-public class LogisticsTileGenericPipe extends TileGenericPipe implements IPeripheral {
+public class LogisticsTileGenericPipe extends lp_TileGenericPipe implements IPeripheral {
 
 	public boolean turtleConnect[] = new boolean[7];
 	

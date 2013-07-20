@@ -101,7 +101,7 @@ public class Watchdog extends Thread {
 		if(server) log.log(Level.SEVERE, "The server has stopped responding!");
 		if(client) log.log(Level.SEVERE, "The client has stopped responding!");
 		if(!dump) {
-			log.log(Level.SEVERE, "This doesn't have to be a crash.");
+			log.log(Level.SEVERE, "This doesn't have to be a crash."));
 			log.log(Level.SEVERE, "But still, please report this to https://github.com/RS485/LogisticsPipes/issues");
 			log.log(Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports");
 		}

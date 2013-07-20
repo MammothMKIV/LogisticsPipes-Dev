@@ -423,7 +423,7 @@ public class LogisticsPipes {
 		LiquidIdentifier.get(9, 0, "water");
 		LiquidIdentifier.get(11, 0, "lava");
 
-		if (!FMLCommonHandler.instance().getModName().contains("MCPC") && ((Configs.WATCHDOG_CLIENT && isClient) || Configs.WATCHDOG_SERVER)) {
+		if (!FMLCommonHandler.instance().getBrandings().contains("MCPC") && ((Configs.WATCHDOG_CLIENT && isClient) || Configs.WATCHDOG_SERVER)) {
 			new Watchdog(isClient);
 			WATCHDOG = true;
 		}
